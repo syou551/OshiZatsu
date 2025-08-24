@@ -1,0 +1,53 @@
+# Docker Compose version 3.8
+
+services:
+  postgres-test:
+    image: postgres:15-alpine
+    container_name: oshizatsu-postgres-test
+    environment:
+      POSTGRES_DB: oshizatsu_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"  # テスト用なので5433ポートを使用
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./init-test-db.sql:/docker-entrypoint-initdb.d/01-init-test-db.sql:ro
+      - ./init-oshizatsu-db.sql:/docker-entrypoint-initdb.d/02-init-oshizatsu-db.sql:ro
+    networks:
+      - oshizatsu-test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d oshizatsu_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # テスト用の管理ツール（オプション）
+  pgadmin-test:
+    image: dpage/pgadmin4:latest
+    container_name: oshizatsu-pgadmin-test
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@test.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8081:80"  # テスト用なので8081ポートを使用
+    volumes:
+      - pgadmin_test_data:/var/lib/pgadmin
+    networks:
+      - oshizatsu-test-network
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+
+volumes:
+  postgres_test_data:
+    driver: local
+  pgadmin_test_data:
+    driver: local
+
+networks:
+  oshizatsu-test-network:
+    driver: bridge

@@ -1,0 +1,87 @@
+# テスト用Makefile
+# 使用方法: make -f Makefile.test <target>
+
+.PHONY: help start stop restart clean test test-db test-integration
+
+# デフォルトターゲット
+help:
+	@echo "利用可能なコマンド:"
+	@echo "  start          - テスト用PostgreSQLコンテナを起動"
+	@echo "  stop           - テスト用PostgreSQLコンテナを停止"
+	@echo "  restart        - テスト用PostgreSQLコンテナを再起動"
+	@echo "  clean          - テスト用コンテナとボリュームを削除"
+	@echo "  test-db        - データベース接続テスト"
+	@echo "  test-integration - 統合テストを実行"
+	@echo "  logs           - コンテナのログを表示"
+	@echo "  db-connect     - oshizatsu_testデータベースに接続"
+	@echo "  db-connect-prod - oshizatsuデータベースに接続"
+
+# テスト用PostgreSQLコンテナを起動
+start:
+	@echo "テスト用PostgreSQLコンテナを起動中..."
+	docker-compose -f docker-compose.test.yml up -d
+	@echo "PostgreSQLコンテナが起動しました"
+	@echo "接続情報:"
+	@echo "  Host: localhost"
+	@echo "  Port: 5432"
+	@echo "  Test Database: oshizatsu_test"
+	@echo "  Prod Database: oshizatsu"
+	@echo "  Username: postgres"
+	@echo "  Password: password"
+	@echo "pgAdmin: http://localhost:8081 (admin@test.com / admin)"
+
+# テスト用PostgreSQLコンテナを停止
+stop:
+	@echo "テスト用PostgreSQLコンテナを停止中..."
+	docker-compose -f docker-compose.test.yml down
+	@echo "PostgreSQLコンテナが停止しました"
+
+# テスト用PostgreSQLコンテナを再起動
+restart: stop start
+
+# テスト用コンテナとボリュームを削除
+clean:
+	@echo "テスト用コンテナとボリュームを削除中..."
+	docker-compose -f docker-compose.test.yml down -v
+	docker volume rm oshizatsu_postgres_test_data oshizatsu_pgadmin_test_data 2>/dev/null || true
+	@echo "クリーンアップが完了しました"
+
+# データベース接続テスト
+test-db:
+	@echo "データベース接続をテスト中..."
+	@until docker exec oshizatsu-postgres-test pg_isready -U postgres -d oshizatsu_test; do \
+		echo "PostgreSQLの起動を待機中..."; \
+		sleep 2; \
+	done
+	@echo "データベース接続テストが成功しました"
+
+# 統合テストを実行
+test-integration: test-db
+	@echo "統合テストを実行中..."
+	@export $$(cat test.env | xargs) && go test -v ./test/...
+
+# コンテナのログを表示
+logs:
+	docker-compose -f docker-compose.test.yml logs -f
+
+# データベースに直接接続
+db-connect:
+	docker exec -it oshizatsu-postgres-test psql -U postgres -d oshizatsu_test
+
+# oshizatsuデータベースに直接接続
+db-connect-prod:
+	docker exec -it oshizatsu-postgres-test psql -U postgres -d oshizatsu
+
+# データベースの状態を確認
+db-status:
+	@echo "oshizatsu_testデータベースの状態を確認中..."
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu_test -c "\dt"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu_test -c "SELECT COUNT(*) as user_count FROM users;"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu_test -c "SELECT COUNT(*) as channel_count FROM channels;"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu_test -c "SELECT COUNT(*) as notification_count FROM notifications;"
+	@echo ""
+	@echo "oshizatsuデータベースの状態を確認中..."
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu -c "\dt"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu -c "SELECT COUNT(*) as user_count FROM users;"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu -c "SELECT COUNT(*) as channel_count FROM channels;"
+	docker exec oshizatsu-postgres-test psql -U postgres -d oshizatsu -c "SELECT COUNT(*) as notification_count FROM notifications;"
