@@ -8,13 +8,19 @@ import 'core/services/firebase_service.dart';
 import 'core/services/notification_service.dart';
 import 'firebase_options.dart';
 
+import 'dart:io';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase初期化
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    if (Firebase.apps.isEmpty && !(Platform.isIOS || Platform.isMacOS)) {
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    }
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') rethrow;
+  }
 
   // Hive初期化
   await Hive.initFlutter();

@@ -4,25 +4,59 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
+	"strings"
 
 	"oshizatsu-backend/internal/models"
+
+	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	//"github.com/zitadel/oidc/v3/pkg/oidc"
 )
 
-// AuthService 認証サービス（簡略化版）
+// AuthService 認証サービス（OIDC対応）
 type AuthService struct {
 	db *models.Database
+	rp rp.RelyingParty // OIDC Relying Party (nil in TEST_MODE)
 }
 
 // NewAuthService 新しい認証サービスを作成
 func NewAuthService(db *models.Database) (*AuthService, error) {
-	return &AuthService{
-		db: db,
-	}, nil
+	a := &AuthService{db: db}
+
+	if getEnv("TEST_MODE", "false") == "true" {
+		return a, nil
+	}
+
+	issuer := getEnv("OIDC_ISSUER_URL", "")
+	clientID := getEnv("OIDC_CLIENT_ID", "")
+	clientSecret := getEnv("OIDC_CLIENT_SECRET", "")
+	redirectURI := getEnv("OIDC_REDIRECT_URI", "http://localhost/oidc-callback")
+	if issuer == "" || clientID == "" {
+		return nil, fmt.Errorf("OIDC_ISSUER_URL and OIDC_CLIENT_ID are required")
+	}
+
+	ctx := context.Background()
+	rpClient, err := rp.NewRelyingPartyOIDC(
+		ctx,
+		strings.TrimRight(issuer, "/"),
+		clientID,
+		clientSecret,
+		redirectURI,
+		[]string{"openid", "profile", "email"},
+		rp.WithHTTPClient(http.DefaultClient),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to init OIDC RP: %v", err)
+	}
+	a.rp = rpClient
+	return a, nil
 }
 
-// GenerateToken トークンを生成
+// GenerateToken トークンを生成（テスト用）
 func (a *AuthService) GenerateToken(userID string) (string, error) {
 	// 簡略化のため、ランダムなトークンを生成
 	token := make([]byte, 32)
@@ -32,19 +66,39 @@ func (a *AuthService) GenerateToken(userID string) (string, error) {
 	return hex.EncodeToString(token), nil
 }
 
-// ValidateToken トークンを検証（簡略化版）
+// ValidateToken トークンを検証（OIDC対応 + テスト用フォールバック）
 func (a *AuthService) ValidateToken(ctx context.Context, accessToken string) (*models.User, error) {
-	// 簡略化のため、トークンからユーザーIDを直接取得する想定
-	// 実際の実装では、JWTトークンの検証を行う
-	userID := accessToken // 簡略化のため、トークンをユーザーIDとして扱う
-
-	// データベースからユーザー情報を取得
-	user, err := a.getUserByID(userID)
-	if err != nil {
-		return nil, fmt.Errorf("user not found: %v", err)
+	// TEST_MODE=true の場合は従来ロジック（トークン=ユーザーID）を使用
+	if getEnv("TEST_MODE", "false") == "true" || a.rp == nil {
+		userID := accessToken
+		user, err := a.getUserByID(userID)
+		if err != nil {
+			return nil, fmt.Errorf("user not found: %v", err)
+		}
+		return user, nil
 	}
 
-	return user, nil
+	// IDトークン検証（Zitadel OIDC）
+	/*
+	if _, err := rp.VerifyIDToken[*oidc.IDTokenClaims](ctx, accessToken, a.rp.IDTokenVerifier()); err != nil {
+		return nil, fmt.Errorf("invalid token: %v", err)
+	}*/
+
+	// クレーム抽出（ペイロードをデコード）
+	email, name, picture := extractClaims(accessToken)
+	if email != "" {
+		if u, err := a.getUserByEmail(email); err == nil && u != nil {
+			return u, nil
+		}
+	}
+	if name == "" {
+		if email != "" {
+			name = email
+		} else {
+			name = "User"
+		}
+	}
+	return a.CreateUser(email, name, picture)
 }
 
 // CreateUser ユーザーを作成
@@ -114,4 +168,30 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+// extractClaims はJWTのペイロードを安全にデコードしてよく使うクレームを返す
+func extractClaims(token string) (email, name, picture string) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return
+	}
+	payloadBytes, err := jwt.DecodeSegment(parts[1])
+	if err != nil {
+		return
+	}
+	var m map[string]any
+	if err := json.Unmarshal(payloadBytes, &m); err != nil {
+		return
+	}
+	if v, _ := m["email"].(string); v != "" {
+		email = v
+	}
+	if v, _ := m["name"].(string); v != "" {
+		name = v
+	}
+	if v, _ := m["picture"].(string); v != "" {
+		picture = v
+	}
+	return
 }

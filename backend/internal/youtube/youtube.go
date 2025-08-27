@@ -99,6 +99,8 @@ func (y *YouTubeService) GetVideoDetails(videoIDs []string) ([]*youtube.Video, e
 	response, err := call.Do()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get video details: %v", err)
+	} else if len(response.Items) == 0 {
+		return nil, fmt.Errorf("no video details found")
 	}
 
 	return response.Items, nil

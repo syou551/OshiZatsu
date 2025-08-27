@@ -64,6 +64,9 @@ dependencies:
   package_info_plus: ^4.2.0
   device_info_plus: ^9.1.1
 
+  protobuf: ^3.1.0
+  fixnum: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -123,3 +126,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  # pubspec.yaml の末尾付近に追加
+#dependency_overrides:
+#   protobuf: 3.1.0

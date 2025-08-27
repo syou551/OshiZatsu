@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/services/auth_service.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -12,31 +13,18 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
   bool _isLoading = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
+  Future<void> _loginWithOIDC() async {
+    setState(() { _isLoading = true; });
     try {
-      // TODO: 実際のログイン処理を実装
-      await Future.delayed(const Duration(seconds: 2)); // シミュレーション
-
+      final auth = AuthService();
+      await auth.loginWithOIDC();
       if (mounted) {
         context.go('/channels');
       }
@@ -44,18 +32,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('ログインに失敗しました: $e'),
+            content: Text('OIDCログインに失敗しました: $e'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
       }
     } finally {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() { _isLoading = false; });
       }
     }
+  }
+
+  Future<void> _createAccountWithOIDC() async {
+    await _loginWithOIDC();
   }
 
   @override
@@ -83,9 +73,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
+                  child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         // アプリアイコン
@@ -135,110 +123,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ),
                         const SizedBox(height: 32),
 
-                        // メールアドレス入力
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            labelText: 'メールアドレス',
-                            prefixIcon: Icon(Icons.email),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'メールアドレスを入力してください';
-                            }
-                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                .hasMatch(value)) {
-                              return '有効なメールアドレスを入力してください';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
-                        // パスワード入力
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'パスワード',
-                            prefixIcon: Icon(Icons.lock),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'パスワードを入力してください';
-                            }
-                            if (value.length < 6) {
-                              return 'パスワードは6文字以上で入力してください';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 24),
-
-                        // ログインボタン
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _login,
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                            ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.login, size: 20),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'ログイン',
-                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // その他のログインオプション
+                        // syou551.dev(Keycloak)でログイン
                         Container(
                           width: double.infinity,
                           child: OutlinedButton.icon(
-                            onPressed: () {
-                              // TODO: OIDCログインを実装
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Row(
-                                    children: [
-                                      const Icon(Icons.info, color: Colors.white),
-                                      const SizedBox(width: 8),
-                                      const Text('OIDCログインは準備中です'),
-                                    ],
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              );
-                            },
+                            onPressed: _isLoading ? null : _loginWithOIDC,
                             icon: const Icon(Icons.security),
                             label: const Text('syou551.devでログイン'),
                             style: OutlinedButton.styleFrom(
@@ -250,9 +139,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 12),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _isLoading ? null : _createAccountWithOIDC,
+                            icon: const Icon(Icons.person_add_alt_1),
+                            label: const Text('syou551.devでアカウント作成'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
                 ),
               ),
             ),

@@ -9,6 +9,9 @@ import (
 )
 
 func TestAuthService_CreateUser(t *testing.T) {
+	// テスト環境用にフォールバックロジックを有効化
+	t.Setenv("TEST_MODE", "true")
+
 	// テスト用データベースを作成
 	db, err := createTestDatabase()
 	if err != nil {
@@ -75,6 +78,9 @@ func TestAuthService_CreateUser(t *testing.T) {
 }
 
 func TestAuthService_GenerateToken(t *testing.T) {
+	// テスト環境用にフォールバックロジックを有効化
+	t.Setenv("TEST_MODE", "true")
+
 	// テスト用データベースを作成
 	db, err := createTestDatabase()
 	if err != nil {
@@ -122,6 +128,9 @@ func TestAuthService_GenerateToken(t *testing.T) {
 }
 
 func TestAuthService_ValidateToken(t *testing.T) {
+	// テスト環境用にフォールバックロジックを有効化
+	t.Setenv("TEST_MODE", "true")
+
 	// テスト用データベースを作成
 	db, err := createTestDatabase()
 	if err != nil {

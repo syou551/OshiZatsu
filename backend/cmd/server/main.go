@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 
 	"oshizatsu-backend/internal/auth"
 	"oshizatsu-backend/internal/models"
@@ -60,13 +61,31 @@ func NewServer(db *models.Database) (*Server, error) {
 
 // Login ログイン処理
 func (s *Server) Login(ctx context.Context, req *proto.LoginRequest) (*proto.LoginResponse, error) {
-	// 簡略化のため、メールアドレスでユーザーを検索または作成
+	// OIDC対応: emailフィールドがJWT形式(3パート)ならIDトークンとして扱う
+	if looksLikeJWT(req.Email) && req.Password == "" {
+		idToken := req.Email
+		user, err := s.authService.ValidateToken(ctx, idToken)
+		if err != nil {
+			return nil, status.Errorf(codes.Unauthenticated, "invalid oidc token: %v", err)
+		}
+		return &proto.LoginResponse{
+			AccessToken:  idToken,
+			RefreshToken: "",
+			UserInfo: &proto.UserInfo{
+				Id:      user.ID,
+				Email:   user.Email,
+				Name:    user.Name,
+				Picture: user.Picture,
+			},
+		}, nil
+	}
+
+	// 従来の簡易ログイン: メールでユーザー作成 + ランダムトークン生成
 	user, err := s.authService.CreateUser(req.Email, "User", "")
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
 	}
 
-	// トークンを生成
 	token, err := s.authService.GenerateToken(user.ID)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to generate token: %v", err)
@@ -82,6 +101,13 @@ func (s *Server) Login(ctx context.Context, req *proto.LoginRequest) (*proto.Log
 			Picture: user.Picture,
 		},
 	}, nil
+}
+
+func looksLikeJWT(s string) bool {
+	if s == "" {
+		return false
+	}
+	return strings.Count(s, ".") == 2
 }
 
 // Logout ログアウト処理

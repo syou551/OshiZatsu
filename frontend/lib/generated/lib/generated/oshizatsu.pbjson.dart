@@ -13,7 +13,7 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../google/protobuf/timestamp.pbjson.dart' as $0;
+import 'package:protobuf/src/google/protobuf/timestamp.pbjson.dart' as $0;
 
 @$core.Deprecated('Use notificationTypeDescriptor instead')
 const NotificationType$json = {

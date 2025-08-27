@@ -134,7 +134,7 @@ func (db *Database) Migrate() error {
 	// 各クエリを実行
 	for i, query := range queries {
 		if _, err := db.Exec(query); err != nil {
-			return fmt.Errorf("failed to execute migration query %d: %v", err)
+			return fmt.Errorf("failed to execute migration query %d: %v", i+1, err)
 		}
 		log.Printf("Executed migration query %d", i+1)
 	}
