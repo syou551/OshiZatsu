@@ -1,8 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grpc/grpc.dart' as grpc;
 
-import '../../generated/lib/generated/oshizatsu.pb.dart' as pb;
+import '../../generated/oshizatsu.pb.dart' as pb;
 import 'backend_client.dart';
 
 class AuthService {
@@ -50,12 +51,20 @@ class AuthService {
 
     // Call backend Login with OIDC ID token (email field used as ID token per backend contract)
     final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
-    final client = BackendAuthClient(channel);
+    final client = BackendClientFactory.createAuthClient(channel);
+
     try {
-      final resp = await client.login(pb.LoginRequest(email: idToken));
-      await _secureStorage.write(key: 'access_token', value: resp.accessToken);
-      await _secureStorage.write(key: 'refresh_token', value: resp.refreshToken);
-      return LoginResult(accessToken: resp.accessToken, refreshToken: resp.refreshToken);
+      final loginResponse = await client.login(pb.LoginRequest(email: idToken));
+
+      await _secureStorage.write(key: 'access_token', value: loginResponse.accessToken);
+      if (loginResponse.refreshToken.isNotEmpty) {
+        await _secureStorage.write(key: 'refresh_token', value: loginResponse.refreshToken);
+      }
+
+      return LoginResult(
+        accessToken: loginResponse.accessToken,
+        refreshToken: loginResponse.refreshToken,
+      );
     } finally {
       await channel.shutdown();
     }
@@ -65,6 +74,55 @@ class AuthService {
     await _secureStorage.delete(key: 'access_token');
     await _secureStorage.delete(key: 'refresh_token');
   }
+
+  Future<UserInfo?> getUserInfo() async {
+    final accessToken = await _secureStorage.read(key: 'access_token');
+    if (accessToken == null) return null;
+
+    final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
+    final client = BackendClientFactory.createAuthClient(channel);
+    try {
+      final resp = await client.getUserInfo(pb.GetUserInfoRequest(accessToken: accessToken));
+      return UserInfo(
+        id: resp.userInfo.id,
+        email: resp.userInfo.email,
+        name: resp.userInfo.name,
+        picture: resp.userInfo.picture,
+      );
+    } catch (e) {
+      print('Failed to get user info: $e');
+      return null;
+    } finally {
+      await channel.shutdown();
+    }
+  }
+
+  Future<bool> updateUserProfile({required String name, String? picture}) async {
+    final accessToken = await _secureStorage.read(key: 'access_token');
+    if (accessToken == null) return false;
+
+    final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
+    final client = BackendClientFactory.createAuthClient(channel);
+    try {
+      final resp = await client.updateUserInfo(
+        pb.UpdateUserInfoRequest(
+          accessToken: accessToken,
+          name: name,
+          picture: picture ?? '',
+        ),
+      );
+      return resp.success;
+    } catch (e) {
+      print('Failed to update user profile: $e');
+      return false;
+    } finally {
+      await channel.shutdown();
+    }
+  }
+
+  Future<String?> getAccessToken() async {
+    return await _secureStorage.read(key: 'access_token');
+  }
 }
 
 class LoginResult {
@@ -72,4 +130,18 @@ class LoginResult {
   final String refreshToken;
 
   LoginResult({required this.accessToken, required this.refreshToken});
+}
+
+class UserInfo {
+  final String id;
+  final String email;
+  final String name;
+  final String picture;
+
+  UserInfo({
+    required this.id,
+    required this.email,
+    required this.name,
+    required this.picture,
+  });
 }

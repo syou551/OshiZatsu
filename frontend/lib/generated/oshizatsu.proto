@@ -3,6 +3,9 @@ syntax = "proto3";
 package oshizatsu;
 
 option go_package = "oshizatsu-backend/proto";
+option java_multiple_files = true;
+option java_package = "com.oshizatsu.grpc";
+option java_outer_classname = "OshizatsuProto";
 
 import "google/protobuf/timestamp.proto";
 
@@ -53,6 +56,18 @@ message GetUserInfoRequest {
 
 message GetUserInfoResponse {
   UserInfo user_info = 1;
+}
+
+message UpdateUserInfoRequest {
+  string access_token = 1;
+  string name = 2;
+  string picture = 3;
+}
+
+message UpdateUserInfoResponse {
+  bool success = 1;
+  string message = 2;
+  UserInfo user_info = 3;
 }
 
 message UserInfo {

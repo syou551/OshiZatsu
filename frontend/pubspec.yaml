@@ -60,9 +60,9 @@ dependencies:
 
   # ユーティリティ
   intl: ^0.18.1
-  # url_launcher: ^6.2.4  # iOS 18.6との互換性問題のため一時的に無効化
   package_info_plus: ^4.2.0
   device_info_plus: ^9.1.1
+  webview_flutter: ^4.5.0
 
   protobuf: ^3.1.0
   fixnum: ^1.1.0
@@ -126,6 +126,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  # pubspec.yaml の末尾付近に追加
-#dependency_overrides:
-#   protobuf: 3.1.0

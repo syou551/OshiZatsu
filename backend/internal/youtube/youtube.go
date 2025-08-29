@@ -113,48 +113,72 @@ func (y *YouTubeService) CheckForNewLiveStreams() error {
 	if err != nil {
 		return fmt.Errorf("failed to get subscribed channels: %v", err)
 	}
-
+	//すべてのチャンネルの最新動画をチェックして，一括でliveStreamingDetailsを取得
+	//チャンネルごとにRSSで最新の動画が登録されていないかをチェックする
 	for _, channel := range channels {
-		if err := y.checkChannelForNewLiveStreams(channel); err != nil {
-			fmt.Printf("Error checking channel %s: %v\n", channel.ChannelID, err)
+		entries, err := y.GetLatestVideos(channel.ChannelID)
+		if err != nil {
+			return fmt.Errorf("failed to get latest videos: %v", err)
+		}
+		if len(entries) == 0 {
 			continue
+		}
+		if channel.LastVideoID == entries[0].VideoID {
+			continue
+		}
+		channel.LastVideoID = entries[0].VideoID
+		channel.UpdatedAt = time.Now()
+		if err := y.updateChannel(channel); err != nil {
+			return fmt.Errorf("failed to update channel: %v", err)
 		}
 	}
 
-	return nil
-}
-
-// checkChannelForNewLiveStreams 特定のチャンネルで新しいライブ配信をチェック
-func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel) error {
-	// 最新の動画を取得
-	entries, err := y.GetLatestVideos(channel.ChannelID)
+	// 一括で動画IDを取得
+	videoIDs := make([]string, len(channels))
+	// 最新のchannel情報を取得
+	channels, err = y.getSubscribedChannels()
 	if err != nil {
-		return fmt.Errorf("failed to get latest videos: %v", err)
+		return fmt.Errorf("failed to get subscribed channels: %v", err)
+	}
+	for i, channel := range channels {
+		videoIDs[i] = channel.LastVideoID
 	}
 
-	if len(entries) == 0 {
-		return nil
-	}
-
-	// 最新の動画IDを取得
-	latestVideoID := entries[0].VideoID
-
-	// 既に処理済みの動画の場合はスキップ
-	if channel.LastVideoID == latestVideoID {
-		return nil
-	}
-
-	// 動画の詳細情報を取得
-	videos, err := y.GetVideoDetails([]string{latestVideoID})
+	// 一括で動画情報を取得
+	videos, err := y.GetVideoDetails(videoIDs)
 	if err != nil {
 		return fmt.Errorf("failed to get video details: %v", err)
 	}
 
-	if len(videos) == 0 {
-		return nil
+	// チャンネルごとにライブ配信の情報をチェック
+	for _, channel := range channels {
+		if err := y.checkChannelForNewLiveStreams(channel, videos); err != nil {
+			fmt.Printf("Error checking channel %s: %v\n", channel.ChannelID, err)
+			continue
+		}
+	}
+	return nil
+}
+
+// checkChannelForNewLiveStreams 特定のチャンネルで新しいライブ配信をチェック
+func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel, videos []*youtube.Video) error {
+	//videosの中からchannelのLastVideoIDと一致する動画を取得
+	var video *youtube.Video
+	for _, v := range videos {
+		if v.Id == channel.LastVideoID {
+			video = v
+			break
+		}
 	}
 
-	video := videos[0]
+	if video == nil {
+		return nil
+	}	
+
+	// 既に処理済みの動画の場合はスキップ
+	if channel.LastVideoID == video.Id {
+		return nil
+	}
 
 	// ライブ配信の情報をチェック
 	if video.LiveStreamingDetails != nil {
@@ -168,7 +192,7 @@ func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel) 
 			// 新しいライブ配信の予約を検出
 			if channel.LastLiveScheduledTime == nil || scheduledTime.After(*channel.LastLiveScheduledTime) {
 				// チャンネル情報を更新
-				channel.LastVideoID = latestVideoID
+				channel.LastVideoID = video.Id
 				channel.LastLiveScheduledTime = &scheduledTime
 				channel.IsLive = false
 				channel.UpdatedAt = time.Now()
@@ -194,7 +218,7 @@ func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel) 
 			// ライブ配信が開始されたことを検出
 			if !channel.IsLive {
 				// チャンネル情報を更新
-				channel.LastVideoID = latestVideoID
+				channel.LastVideoID = video.Id
 				channel.IsLive = true
 				channel.UpdatedAt = time.Now()
 
@@ -208,11 +232,32 @@ func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel) 
 				}
 			}
 		}
+
+		// ライブ配信が終了した場合
+		if video.LiveStreamingDetails.ActualEndTime != "" {
+			_, err := time.Parse(time.RFC3339, video.LiveStreamingDetails.ActualEndTime)
+			if err != nil {
+				return fmt.Errorf("failed to parse actual end time: %v", err)
+			}
+
+			// ライブ配信の終了を検出
+			if channel.IsLive {
+				channel.LastVideoID = video.Id
+				channel.IsLive = false
+				channel.UpdatedAt = time.Now()
+
+				if err := y.updateChannel(channel); err != nil {
+					return fmt.Errorf("failed to update channel on end: %v", err)
+				}
+
+				// 終了通知が必要な場合はここで送信（現状は仕様外のため未送信）
+			}
+		}
 	}
 
 	// 通常の動画の場合は、LastVideoIDのみ更新
 	if video.LiveStreamingDetails == nil {
-		channel.LastVideoID = latestVideoID
+		channel.LastVideoID = video.Id
 		channel.UpdatedAt = time.Now()
 
 		if err := y.updateChannel(channel); err != nil {

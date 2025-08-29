@@ -80,9 +80,9 @@ func (a *AuthService) ValidateToken(ctx context.Context, accessToken string) (*m
 
 	// IDトークン検証（Zitadel OIDC）
 	/*
-	if _, err := rp.VerifyIDToken[*oidc.IDTokenClaims](ctx, accessToken, a.rp.IDTokenVerifier()); err != nil {
-		return nil, fmt.Errorf("invalid token: %v", err)
-	}*/
+		if _, err := rp.VerifyIDToken[*oidc.IDTokenClaims](ctx, accessToken, a.rp.IDTokenVerifier()); err != nil {
+			return nil, fmt.Errorf("invalid token: %v", err)
+		}*/
 
 	// クレーム抽出（ペイロードをデコード）
 	email, name, picture := extractClaims(accessToken)
@@ -110,6 +110,14 @@ func (a *AuthService) CreateUser(email, name, picture string) (*models.User, err
 	}
 
 	return user, nil
+}
+
+// UpdateUser ユーザー情報を更新
+func (a *AuthService) UpdateUser(user *models.User) error {
+	if err := a.updateUser(user); err != nil {
+		return fmt.Errorf("failed to update user: %v", err)
+	}
+	return nil
 }
 
 // getUserByEmail メールアドレスでユーザーを取得

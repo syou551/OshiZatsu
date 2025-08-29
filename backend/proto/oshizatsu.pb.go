@@ -357,6 +357,126 @@ func (x *GetUserInfoResponse) GetUserInfo() *UserInfo {
 	return nil
 }
 
+type UpdateUserInfoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Picture       string                 `protobuf:"bytes,3,opt,name=picture,proto3" json:"picture,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserInfoRequest) Reset() {
+	*x = UpdateUserInfoRequest{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserInfoRequest) ProtoMessage() {}
+
+func (x *UpdateUserInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserInfoRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserInfoRequest) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateUserInfoRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *UpdateUserInfoRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateUserInfoRequest) GetPicture() string {
+	if x != nil {
+		return x.Picture
+	}
+	return ""
+}
+
+type UpdateUserInfoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	UserInfo      *UserInfo              `protobuf:"bytes,3,opt,name=user_info,json=userInfo,proto3" json:"user_info,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserInfoResponse) Reset() {
+	*x = UpdateUserInfoResponse{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserInfoResponse) ProtoMessage() {}
+
+func (x *UpdateUserInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserInfoResponse.ProtoReflect.Descriptor instead.
+func (*UpdateUserInfoResponse) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdateUserInfoResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateUserInfoResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *UpdateUserInfoResponse) GetUserInfo() *UserInfo {
+	if x != nil {
+		return x.UserInfo
+	}
+	return nil
+}
+
 type UserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -369,7 +489,7 @@ type UserInfo struct {
 
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[6]
+	mi := &file_proto_oshizatsu_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -381,7 +501,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[6]
+	mi := &file_proto_oshizatsu_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -394,7 +514,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{6}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UserInfo) GetId() string {
@@ -437,7 +557,7 @@ type SubscribeChannelRequest struct {
 
 func (x *SubscribeChannelRequest) Reset() {
 	*x = SubscribeChannelRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[7]
+	mi := &file_proto_oshizatsu_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -449,7 +569,7 @@ func (x *SubscribeChannelRequest) String() string {
 func (*SubscribeChannelRequest) ProtoMessage() {}
 
 func (x *SubscribeChannelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[7]
+	mi := &file_proto_oshizatsu_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -462,7 +582,7 @@ func (x *SubscribeChannelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeChannelRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeChannelRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{7}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SubscribeChannelRequest) GetChannelId() string {
@@ -496,7 +616,7 @@ type SubscribeChannelResponse struct {
 
 func (x *SubscribeChannelResponse) Reset() {
 	*x = SubscribeChannelResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[8]
+	mi := &file_proto_oshizatsu_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -508,7 +628,7 @@ func (x *SubscribeChannelResponse) String() string {
 func (*SubscribeChannelResponse) ProtoMessage() {}
 
 func (x *SubscribeChannelResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[8]
+	mi := &file_proto_oshizatsu_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -521,7 +641,7 @@ func (x *SubscribeChannelResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeChannelResponse.ProtoReflect.Descriptor instead.
 func (*SubscribeChannelResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{8}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SubscribeChannelResponse) GetSuccess() bool {
@@ -548,7 +668,7 @@ type UnsubscribeChannelRequest struct {
 
 func (x *UnsubscribeChannelRequest) Reset() {
 	*x = UnsubscribeChannelRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[9]
+	mi := &file_proto_oshizatsu_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -560,7 +680,7 @@ func (x *UnsubscribeChannelRequest) String() string {
 func (*UnsubscribeChannelRequest) ProtoMessage() {}
 
 func (x *UnsubscribeChannelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[9]
+	mi := &file_proto_oshizatsu_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -573,7 +693,7 @@ func (x *UnsubscribeChannelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnsubscribeChannelRequest.ProtoReflect.Descriptor instead.
 func (*UnsubscribeChannelRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{9}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UnsubscribeChannelRequest) GetChannelId() string {
@@ -600,7 +720,7 @@ type UnsubscribeChannelResponse struct {
 
 func (x *UnsubscribeChannelResponse) Reset() {
 	*x = UnsubscribeChannelResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[10]
+	mi := &file_proto_oshizatsu_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -612,7 +732,7 @@ func (x *UnsubscribeChannelResponse) String() string {
 func (*UnsubscribeChannelResponse) ProtoMessage() {}
 
 func (x *UnsubscribeChannelResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[10]
+	mi := &file_proto_oshizatsu_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -625,7 +745,7 @@ func (x *UnsubscribeChannelResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnsubscribeChannelResponse.ProtoReflect.Descriptor instead.
 func (*UnsubscribeChannelResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{10}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UnsubscribeChannelResponse) GetSuccess() bool {
@@ -651,7 +771,7 @@ type GetSubscribedChannelsRequest struct {
 
 func (x *GetSubscribedChannelsRequest) Reset() {
 	*x = GetSubscribedChannelsRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[11]
+	mi := &file_proto_oshizatsu_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -663,7 +783,7 @@ func (x *GetSubscribedChannelsRequest) String() string {
 func (*GetSubscribedChannelsRequest) ProtoMessage() {}
 
 func (x *GetSubscribedChannelsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[11]
+	mi := &file_proto_oshizatsu_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -676,7 +796,7 @@ func (x *GetSubscribedChannelsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSubscribedChannelsRequest.ProtoReflect.Descriptor instead.
 func (*GetSubscribedChannelsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{11}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetSubscribedChannelsRequest) GetAccessToken() string {
@@ -695,7 +815,7 @@ type GetSubscribedChannelsResponse struct {
 
 func (x *GetSubscribedChannelsResponse) Reset() {
 	*x = GetSubscribedChannelsResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[12]
+	mi := &file_proto_oshizatsu_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -707,7 +827,7 @@ func (x *GetSubscribedChannelsResponse) String() string {
 func (*GetSubscribedChannelsResponse) ProtoMessage() {}
 
 func (x *GetSubscribedChannelsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[12]
+	mi := &file_proto_oshizatsu_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -720,7 +840,7 @@ func (x *GetSubscribedChannelsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSubscribedChannelsResponse.ProtoReflect.Descriptor instead.
 func (*GetSubscribedChannelsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{12}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetSubscribedChannelsResponse) GetChannels() []*Channel {
@@ -743,7 +863,7 @@ type Channel struct {
 
 func (x *Channel) Reset() {
 	*x = Channel{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[13]
+	mi := &file_proto_oshizatsu_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -755,7 +875,7 @@ func (x *Channel) String() string {
 func (*Channel) ProtoMessage() {}
 
 func (x *Channel) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[13]
+	mi := &file_proto_oshizatsu_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -768,7 +888,7 @@ func (x *Channel) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Channel.ProtoReflect.Descriptor instead.
 func (*Channel) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{13}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *Channel) GetId() string {
@@ -817,7 +937,7 @@ type RegisterFCMTokenRequest struct {
 
 func (x *RegisterFCMTokenRequest) Reset() {
 	*x = RegisterFCMTokenRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[14]
+	mi := &file_proto_oshizatsu_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -829,7 +949,7 @@ func (x *RegisterFCMTokenRequest) String() string {
 func (*RegisterFCMTokenRequest) ProtoMessage() {}
 
 func (x *RegisterFCMTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[14]
+	mi := &file_proto_oshizatsu_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -842,7 +962,7 @@ func (x *RegisterFCMTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterFCMTokenRequest.ProtoReflect.Descriptor instead.
 func (*RegisterFCMTokenRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{14}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RegisterFCMTokenRequest) GetFcmToken() string {
@@ -869,7 +989,7 @@ type RegisterFCMTokenResponse struct {
 
 func (x *RegisterFCMTokenResponse) Reset() {
 	*x = RegisterFCMTokenResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[15]
+	mi := &file_proto_oshizatsu_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -881,7 +1001,7 @@ func (x *RegisterFCMTokenResponse) String() string {
 func (*RegisterFCMTokenResponse) ProtoMessage() {}
 
 func (x *RegisterFCMTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[15]
+	mi := &file_proto_oshizatsu_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -894,7 +1014,7 @@ func (x *RegisterFCMTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterFCMTokenResponse.ProtoReflect.Descriptor instead.
 func (*RegisterFCMTokenResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{15}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *RegisterFCMTokenResponse) GetSuccess() bool {
@@ -921,7 +1041,7 @@ type UnregisterFCMTokenRequest struct {
 
 func (x *UnregisterFCMTokenRequest) Reset() {
 	*x = UnregisterFCMTokenRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[16]
+	mi := &file_proto_oshizatsu_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -933,7 +1053,7 @@ func (x *UnregisterFCMTokenRequest) String() string {
 func (*UnregisterFCMTokenRequest) ProtoMessage() {}
 
 func (x *UnregisterFCMTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[16]
+	mi := &file_proto_oshizatsu_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -946,7 +1066,7 @@ func (x *UnregisterFCMTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnregisterFCMTokenRequest.ProtoReflect.Descriptor instead.
 func (*UnregisterFCMTokenRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{16}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UnregisterFCMTokenRequest) GetFcmToken() string {
@@ -973,7 +1093,7 @@ type UnregisterFCMTokenResponse struct {
 
 func (x *UnregisterFCMTokenResponse) Reset() {
 	*x = UnregisterFCMTokenResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[17]
+	mi := &file_proto_oshizatsu_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -985,7 +1105,7 @@ func (x *UnregisterFCMTokenResponse) String() string {
 func (*UnregisterFCMTokenResponse) ProtoMessage() {}
 
 func (x *UnregisterFCMTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[17]
+	mi := &file_proto_oshizatsu_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -998,7 +1118,7 @@ func (x *UnregisterFCMTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnregisterFCMTokenResponse.ProtoReflect.Descriptor instead.
 func (*UnregisterFCMTokenResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{17}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UnregisterFCMTokenResponse) GetSuccess() bool {
@@ -1026,7 +1146,7 @@ type GetNotificationsRequest struct {
 
 func (x *GetNotificationsRequest) Reset() {
 	*x = GetNotificationsRequest{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[18]
+	mi := &file_proto_oshizatsu_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1038,7 +1158,7 @@ func (x *GetNotificationsRequest) String() string {
 func (*GetNotificationsRequest) ProtoMessage() {}
 
 func (x *GetNotificationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[18]
+	mi := &file_proto_oshizatsu_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1051,7 +1171,7 @@ func (x *GetNotificationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNotificationsRequest.ProtoReflect.Descriptor instead.
 func (*GetNotificationsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{18}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetNotificationsRequest) GetAccessToken() string {
@@ -1085,7 +1205,7 @@ type GetNotificationsResponse struct {
 
 func (x *GetNotificationsResponse) Reset() {
 	*x = GetNotificationsResponse{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[19]
+	mi := &file_proto_oshizatsu_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1097,7 +1217,7 @@ func (x *GetNotificationsResponse) String() string {
 func (*GetNotificationsResponse) ProtoMessage() {}
 
 func (x *GetNotificationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[19]
+	mi := &file_proto_oshizatsu_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1110,7 +1230,7 @@ func (x *GetNotificationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNotificationsResponse.ProtoReflect.Descriptor instead.
 func (*GetNotificationsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{19}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetNotificationsResponse) GetNotifications() []*Notification {
@@ -1143,7 +1263,7 @@ type Notification struct {
 
 func (x *Notification) Reset() {
 	*x = Notification{}
-	mi := &file_proto_oshizatsu_proto_msgTypes[20]
+	mi := &file_proto_oshizatsu_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1155,7 +1275,7 @@ func (x *Notification) String() string {
 func (*Notification) ProtoMessage() {}
 
 func (x *Notification) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_oshizatsu_proto_msgTypes[20]
+	mi := &file_proto_oshizatsu_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1168,7 +1288,7 @@ func (x *Notification) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Notification.ProtoReflect.Descriptor instead.
 func (*Notification) Descriptor() ([]byte, []int) {
-	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{20}
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *Notification) GetId() string {
@@ -1246,7 +1366,15 @@ const file_proto_oshizatsu_proto_rawDesc = "" +
 	"\x12GetUserInfoRequest\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"G\n" +
 	"\x13GetUserInfoResponse\x120\n" +
-	"\tuser_info\x18\x01 \x01(\v2\x13.oshizatsu.UserInfoR\buserInfo\"^\n" +
+	"\tuser_info\x18\x01 \x01(\v2\x13.oshizatsu.UserInfoR\buserInfo\"h\n" +
+	"\x15UpdateUserInfoRequest\x12!\n" +
+	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
+	"\apicture\x18\x03 \x01(\tR\apicture\"~\n" +
+	"\x16UpdateUserInfoResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x120\n" +
+	"\tuser_info\x18\x03 \x01(\v2\x13.oshizatsu.UserInfoR\buserInfo\"^\n" +
 	"\bUserInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
@@ -1311,11 +1439,12 @@ const file_proto_oshizatsu_proto_rawDesc = "" +
 	"\ais_read\x18\b \x01(\bR\x06isRead*.\n" +
 	"\x10NotificationType\x12\r\n" +
 	"\tSCHEDULED\x10\x00\x12\v\n" +
-	"\aSTARTED\x10\x012\xd6\x01\n" +
+	"\aSTARTED\x10\x012\xad\x02\n" +
 	"\vAuthService\x12:\n" +
 	"\x05Login\x12\x17.oshizatsu.LoginRequest\x1a\x18.oshizatsu.LoginResponse\x12=\n" +
 	"\x06Logout\x12\x18.oshizatsu.LogoutRequest\x1a\x19.oshizatsu.LogoutResponse\x12L\n" +
-	"\vGetUserInfo\x12\x1d.oshizatsu.GetUserInfoRequest\x1a\x1e.oshizatsu.GetUserInfoResponse2\xbc\x02\n" +
+	"\vGetUserInfo\x12\x1d.oshizatsu.GetUserInfoRequest\x1a\x1e.oshizatsu.GetUserInfoResponse\x12U\n" +
+	"\x0eUpdateUserInfo\x12 .oshizatsu.UpdateUserInfoRequest\x1a!.oshizatsu.UpdateUserInfoResponse2\xbc\x02\n" +
 	"\x0eChannelService\x12[\n" +
 	"\x10SubscribeChannel\x12\".oshizatsu.SubscribeChannelRequest\x1a#.oshizatsu.SubscribeChannelResponse\x12a\n" +
 	"\x12UnsubscribeChannel\x12$.oshizatsu.UnsubscribeChannelRequest\x1a%.oshizatsu.UnsubscribeChannelResponse\x12j\n" +
@@ -1338,7 +1467,7 @@ func file_proto_oshizatsu_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_oshizatsu_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_oshizatsu_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_proto_oshizatsu_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_proto_oshizatsu_proto_goTypes = []any{
 	(NotificationType)(0),                 // 0: oshizatsu.NotificationType
 	(*LoginRequest)(nil),                  // 1: oshizatsu.LoginRequest
@@ -1347,54 +1476,59 @@ var file_proto_oshizatsu_proto_goTypes = []any{
 	(*LogoutResponse)(nil),                // 4: oshizatsu.LogoutResponse
 	(*GetUserInfoRequest)(nil),            // 5: oshizatsu.GetUserInfoRequest
 	(*GetUserInfoResponse)(nil),           // 6: oshizatsu.GetUserInfoResponse
-	(*UserInfo)(nil),                      // 7: oshizatsu.UserInfo
-	(*SubscribeChannelRequest)(nil),       // 8: oshizatsu.SubscribeChannelRequest
-	(*SubscribeChannelResponse)(nil),      // 9: oshizatsu.SubscribeChannelResponse
-	(*UnsubscribeChannelRequest)(nil),     // 10: oshizatsu.UnsubscribeChannelRequest
-	(*UnsubscribeChannelResponse)(nil),    // 11: oshizatsu.UnsubscribeChannelResponse
-	(*GetSubscribedChannelsRequest)(nil),  // 12: oshizatsu.GetSubscribedChannelsRequest
-	(*GetSubscribedChannelsResponse)(nil), // 13: oshizatsu.GetSubscribedChannelsResponse
-	(*Channel)(nil),                       // 14: oshizatsu.Channel
-	(*RegisterFCMTokenRequest)(nil),       // 15: oshizatsu.RegisterFCMTokenRequest
-	(*RegisterFCMTokenResponse)(nil),      // 16: oshizatsu.RegisterFCMTokenResponse
-	(*UnregisterFCMTokenRequest)(nil),     // 17: oshizatsu.UnregisterFCMTokenRequest
-	(*UnregisterFCMTokenResponse)(nil),    // 18: oshizatsu.UnregisterFCMTokenResponse
-	(*GetNotificationsRequest)(nil),       // 19: oshizatsu.GetNotificationsRequest
-	(*GetNotificationsResponse)(nil),      // 20: oshizatsu.GetNotificationsResponse
-	(*Notification)(nil),                  // 21: oshizatsu.Notification
-	(*timestamppb.Timestamp)(nil),         // 22: google.protobuf.Timestamp
+	(*UpdateUserInfoRequest)(nil),         // 7: oshizatsu.UpdateUserInfoRequest
+	(*UpdateUserInfoResponse)(nil),        // 8: oshizatsu.UpdateUserInfoResponse
+	(*UserInfo)(nil),                      // 9: oshizatsu.UserInfo
+	(*SubscribeChannelRequest)(nil),       // 10: oshizatsu.SubscribeChannelRequest
+	(*SubscribeChannelResponse)(nil),      // 11: oshizatsu.SubscribeChannelResponse
+	(*UnsubscribeChannelRequest)(nil),     // 12: oshizatsu.UnsubscribeChannelRequest
+	(*UnsubscribeChannelResponse)(nil),    // 13: oshizatsu.UnsubscribeChannelResponse
+	(*GetSubscribedChannelsRequest)(nil),  // 14: oshizatsu.GetSubscribedChannelsRequest
+	(*GetSubscribedChannelsResponse)(nil), // 15: oshizatsu.GetSubscribedChannelsResponse
+	(*Channel)(nil),                       // 16: oshizatsu.Channel
+	(*RegisterFCMTokenRequest)(nil),       // 17: oshizatsu.RegisterFCMTokenRequest
+	(*RegisterFCMTokenResponse)(nil),      // 18: oshizatsu.RegisterFCMTokenResponse
+	(*UnregisterFCMTokenRequest)(nil),     // 19: oshizatsu.UnregisterFCMTokenRequest
+	(*UnregisterFCMTokenResponse)(nil),    // 20: oshizatsu.UnregisterFCMTokenResponse
+	(*GetNotificationsRequest)(nil),       // 21: oshizatsu.GetNotificationsRequest
+	(*GetNotificationsResponse)(nil),      // 22: oshizatsu.GetNotificationsResponse
+	(*Notification)(nil),                  // 23: oshizatsu.Notification
+	(*timestamppb.Timestamp)(nil),         // 24: google.protobuf.Timestamp
 }
 var file_proto_oshizatsu_proto_depIdxs = []int32{
-	7,  // 0: oshizatsu.LoginResponse.user_info:type_name -> oshizatsu.UserInfo
-	7,  // 1: oshizatsu.GetUserInfoResponse.user_info:type_name -> oshizatsu.UserInfo
-	14, // 2: oshizatsu.GetSubscribedChannelsResponse.channels:type_name -> oshizatsu.Channel
-	22, // 3: oshizatsu.Channel.last_live_scheduled:type_name -> google.protobuf.Timestamp
-	21, // 4: oshizatsu.GetNotificationsResponse.notifications:type_name -> oshizatsu.Notification
-	0,  // 5: oshizatsu.Notification.type:type_name -> oshizatsu.NotificationType
-	22, // 6: oshizatsu.Notification.created_at:type_name -> google.protobuf.Timestamp
-	1,  // 7: oshizatsu.AuthService.Login:input_type -> oshizatsu.LoginRequest
-	3,  // 8: oshizatsu.AuthService.Logout:input_type -> oshizatsu.LogoutRequest
-	5,  // 9: oshizatsu.AuthService.GetUserInfo:input_type -> oshizatsu.GetUserInfoRequest
-	8,  // 10: oshizatsu.ChannelService.SubscribeChannel:input_type -> oshizatsu.SubscribeChannelRequest
-	10, // 11: oshizatsu.ChannelService.UnsubscribeChannel:input_type -> oshizatsu.UnsubscribeChannelRequest
-	12, // 12: oshizatsu.ChannelService.GetSubscribedChannels:input_type -> oshizatsu.GetSubscribedChannelsRequest
-	15, // 13: oshizatsu.NotificationService.RegisterFCMToken:input_type -> oshizatsu.RegisterFCMTokenRequest
-	17, // 14: oshizatsu.NotificationService.UnregisterFCMToken:input_type -> oshizatsu.UnregisterFCMTokenRequest
-	19, // 15: oshizatsu.NotificationService.GetNotifications:input_type -> oshizatsu.GetNotificationsRequest
-	2,  // 16: oshizatsu.AuthService.Login:output_type -> oshizatsu.LoginResponse
-	4,  // 17: oshizatsu.AuthService.Logout:output_type -> oshizatsu.LogoutResponse
-	6,  // 18: oshizatsu.AuthService.GetUserInfo:output_type -> oshizatsu.GetUserInfoResponse
-	9,  // 19: oshizatsu.ChannelService.SubscribeChannel:output_type -> oshizatsu.SubscribeChannelResponse
-	11, // 20: oshizatsu.ChannelService.UnsubscribeChannel:output_type -> oshizatsu.UnsubscribeChannelResponse
-	13, // 21: oshizatsu.ChannelService.GetSubscribedChannels:output_type -> oshizatsu.GetSubscribedChannelsResponse
-	16, // 22: oshizatsu.NotificationService.RegisterFCMToken:output_type -> oshizatsu.RegisterFCMTokenResponse
-	18, // 23: oshizatsu.NotificationService.UnregisterFCMToken:output_type -> oshizatsu.UnregisterFCMTokenResponse
-	20, // 24: oshizatsu.NotificationService.GetNotifications:output_type -> oshizatsu.GetNotificationsResponse
-	16, // [16:25] is the sub-list for method output_type
-	7,  // [7:16] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	9,  // 0: oshizatsu.LoginResponse.user_info:type_name -> oshizatsu.UserInfo
+	9,  // 1: oshizatsu.GetUserInfoResponse.user_info:type_name -> oshizatsu.UserInfo
+	9,  // 2: oshizatsu.UpdateUserInfoResponse.user_info:type_name -> oshizatsu.UserInfo
+	16, // 3: oshizatsu.GetSubscribedChannelsResponse.channels:type_name -> oshizatsu.Channel
+	24, // 4: oshizatsu.Channel.last_live_scheduled:type_name -> google.protobuf.Timestamp
+	23, // 5: oshizatsu.GetNotificationsResponse.notifications:type_name -> oshizatsu.Notification
+	0,  // 6: oshizatsu.Notification.type:type_name -> oshizatsu.NotificationType
+	24, // 7: oshizatsu.Notification.created_at:type_name -> google.protobuf.Timestamp
+	1,  // 8: oshizatsu.AuthService.Login:input_type -> oshizatsu.LoginRequest
+	3,  // 9: oshizatsu.AuthService.Logout:input_type -> oshizatsu.LogoutRequest
+	5,  // 10: oshizatsu.AuthService.GetUserInfo:input_type -> oshizatsu.GetUserInfoRequest
+	7,  // 11: oshizatsu.AuthService.UpdateUserInfo:input_type -> oshizatsu.UpdateUserInfoRequest
+	10, // 12: oshizatsu.ChannelService.SubscribeChannel:input_type -> oshizatsu.SubscribeChannelRequest
+	12, // 13: oshizatsu.ChannelService.UnsubscribeChannel:input_type -> oshizatsu.UnsubscribeChannelRequest
+	14, // 14: oshizatsu.ChannelService.GetSubscribedChannels:input_type -> oshizatsu.GetSubscribedChannelsRequest
+	17, // 15: oshizatsu.NotificationService.RegisterFCMToken:input_type -> oshizatsu.RegisterFCMTokenRequest
+	19, // 16: oshizatsu.NotificationService.UnregisterFCMToken:input_type -> oshizatsu.UnregisterFCMTokenRequest
+	21, // 17: oshizatsu.NotificationService.GetNotifications:input_type -> oshizatsu.GetNotificationsRequest
+	2,  // 18: oshizatsu.AuthService.Login:output_type -> oshizatsu.LoginResponse
+	4,  // 19: oshizatsu.AuthService.Logout:output_type -> oshizatsu.LogoutResponse
+	6,  // 20: oshizatsu.AuthService.GetUserInfo:output_type -> oshizatsu.GetUserInfoResponse
+	8,  // 21: oshizatsu.AuthService.UpdateUserInfo:output_type -> oshizatsu.UpdateUserInfoResponse
+	11, // 22: oshizatsu.ChannelService.SubscribeChannel:output_type -> oshizatsu.SubscribeChannelResponse
+	13, // 23: oshizatsu.ChannelService.UnsubscribeChannel:output_type -> oshizatsu.UnsubscribeChannelResponse
+	15, // 24: oshizatsu.ChannelService.GetSubscribedChannels:output_type -> oshizatsu.GetSubscribedChannelsResponse
+	18, // 25: oshizatsu.NotificationService.RegisterFCMToken:output_type -> oshizatsu.RegisterFCMTokenResponse
+	20, // 26: oshizatsu.NotificationService.UnregisterFCMToken:output_type -> oshizatsu.UnregisterFCMTokenResponse
+	22, // 27: oshizatsu.NotificationService.GetNotifications:output_type -> oshizatsu.GetNotificationsResponse
+	18, // [18:28] is the sub-list for method output_type
+	8,  // [8:18] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_oshizatsu_proto_init() }
@@ -1408,7 +1542,7 @@ func file_proto_oshizatsu_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_oshizatsu_proto_rawDesc), len(file_proto_oshizatsu_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   21,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   3,
 		},

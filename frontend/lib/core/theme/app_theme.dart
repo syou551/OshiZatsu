@@ -22,6 +22,9 @@ class AppTheme {
   // エラー色
   static const Color errorColor = Color(0xFFDC3545);
 
+  // 成功色
+  static const Color successColor = Color(0xFF28A745);
+
   // ライトテーマ
   static ThemeData get lightTheme {
     return ThemeData(

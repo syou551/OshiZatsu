@@ -135,6 +135,38 @@ func (s *Server) GetUserInfo(ctx context.Context, req *proto.GetUserInfoRequest)
 	}, nil
 }
 
+// UpdateUserInfo ユーザー情報更新
+func (s *Server) UpdateUserInfo(ctx context.Context, req *proto.UpdateUserInfoRequest) (*proto.UpdateUserInfoResponse, error) {
+	user, err := s.authService.ValidateToken(ctx, req.AccessToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+	}
+
+	// ユーザー情報を更新
+	if req.Name != "" {
+		user.Name = req.Name
+	}
+	if req.Picture != "" {
+		user.Picture = req.Picture
+	}
+
+	// データベースを更新
+	if err := s.authService.UpdateUser(user); err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to update user: %v", err)
+	}
+
+	return &proto.UpdateUserInfoResponse{
+		Success: true,
+		Message: "User information updated successfully",
+		UserInfo: &proto.UserInfo{
+			Id:      user.ID,
+			Email:   user.Email,
+			Name:    user.Name,
+			Picture: user.Picture,
+		},
+	}, nil
+}
+
 // SubscribeChannel チャンネル登録
 func (s *Server) SubscribeChannel(ctx context.Context, req *proto.SubscribeChannelRequest) (*proto.SubscribeChannelResponse, error) {
 	user, err := s.authService.ValidateToken(ctx, req.AccessToken)
@@ -148,8 +180,29 @@ func (s *Server) SubscribeChannel(ctx context.Context, req *proto.SubscribeChann
 		return nil, status.Errorf(codes.Internal, "failed to create channel: %v", err)
 	}
 
+	// 既存のチャンネルを取得（作成されたチャンネルまたは既存のチャンネル）
+	existingChannel, err := s.getChannelByChannelID(req.ChannelId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get channel: %v", err)
+	}
+
+	// ユーザーが既にこのチャンネルに登録しているかチェック
+	userChannels, err := s.getUserChannels(user.ID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get user channels: %v", err)
+	}
+
+	for _, userChannel := range userChannels {
+		if userChannel.ChannelID == req.ChannelId {
+			return &proto.SubscribeChannelResponse{
+				Success: false,
+				Message: "既にこのチャンネルに登録されています",
+			}, nil
+		}
+	}
+
 	// ユーザーチャンネル関連を作成
-	userChannel := models.NewUserChannel(user.ID, channel.ID)
+	userChannel := models.NewUserChannel(user.ID, existingChannel.ID)
 	if err := s.createUserChannel(userChannel); err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to subscribe to channel: %v", err)
 	}
@@ -430,7 +483,7 @@ func main() {
 
 	// YouTube APIチェックの定期実行を開始
 	c := cron.New()
-	c.AddFunc("@hourly", func() {
+	c.AddFunc("@every 10m", func() {
 		log.Println("Checking for new live streams...")
 		if err := server.youtubeService.CheckForNewLiveStreams(); err != nil {
 			log.Printf("Error checking for new live streams: %v", err)

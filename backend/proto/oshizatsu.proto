@@ -11,6 +11,7 @@ service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse);
   rpc Logout(LogoutRequest) returns (LogoutResponse);
   rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+  rpc UpdateUserInfo(UpdateUserInfoRequest) returns (UpdateUserInfoResponse);
 }
 
 // チャンネル管理サービス
@@ -53,6 +54,18 @@ message GetUserInfoRequest {
 
 message GetUserInfoResponse {
   UserInfo user_info = 1;
+}
+
+message UpdateUserInfoRequest {
+  string access_token = 1;
+  string name = 2;
+  string picture = 3;
+}
+
+message UpdateUserInfoResponse {
+  bool success = 1;
+  string message = 2;
+  UserInfo user_info = 3;
 }
 
 message UserInfo {

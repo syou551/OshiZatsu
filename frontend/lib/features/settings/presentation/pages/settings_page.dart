@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/services/auth_service.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -16,6 +17,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _scheduledNotificationsEnabled = true;
   bool _startedNotificationsEnabled = true;
   bool _darkModeEnabled = false;
+
+  final authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +141,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               subtitle: const Text('ユーザー情報の編集'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                // TODO: プロフィール編集ページに遷移
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('プロフィール編集は準備中です'),
-                  ),
-                );
+                context.push('/profile/edit');
               },
             ),
           ),
@@ -361,7 +359,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              // TODO: ログアウト処理を実装
+              // ログアウトを実行する
+              final authService = AuthService();
+              authService.logout();
               Navigator.of(context).pop();
               context.go('/login');
               ScaffoldMessenger.of(context).showSnackBar(

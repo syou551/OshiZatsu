@@ -6,6 +6,7 @@ import 'features/auth/presentation/pages/login_page.dart';
 import 'features/channels/presentation/pages/channels_page.dart';
 import 'features/notifications/presentation/pages/notifications_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
+import 'features/profile/presentation/pages/profile_edit_page.dart';
 
 class OshiZatsuApp extends StatelessWidget {
   const OshiZatsuApp({super.key});
@@ -27,6 +28,10 @@ final _router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/profile/edit',
+      builder: (context, state) => const ProfileEditPage(),
     ),
     ShellRoute(
       builder: (context, state, child) => MainScaffold(child: child),

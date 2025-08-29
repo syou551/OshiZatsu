@@ -1,35 +1,33 @@
 import 'package:grpc/grpc.dart' as grpc;
-
-import '../../generated/lib/generated/oshizatsu.pb.dart' as pb;
-
-class BackendAuthClient extends grpc.Client {
-  BackendAuthClient(
-    this.channel, {
-    grpc.CallOptions? options,
-    Iterable<grpc.ClientInterceptor>? interceptors,
-  }) : super(channel, options: options, interceptors: interceptors);
-
-  final grpc.ClientChannel channel;
-
-  static final _loginMethod = grpc.ClientMethod<pb.LoginRequest, pb.LoginResponse>(
-    '/oshizatsu.AuthService/Login',
-    (pb.LoginRequest value) => value.writeToBuffer(),
-    (List<int> value) => pb.LoginResponse.fromBuffer(value),
-  );
-
-  grpc.ResponseFuture<pb.LoginResponse> login(pb.LoginRequest request, {grpc.CallOptions? options}) {
-    return $createUnaryCall(_loginMethod, request, options: options);
-  }
-}
+import 'package:oshizatsu_frontend/generated/oshizatsu.pb.dart' as pb;
+import 'package:oshizatsu_frontend/generated/oshizatsu.pbgrpc.dart' as pbgrpc;
 
 class BackendClientFactory {
-  static grpc.ClientChannel createChannel({required String host, required int port, bool useTls = false}) {
+  static grpc.ClientChannel createChannel({
+    required String host,
+    required int port,
+    bool useTls = false,
+  }) {
     return grpc.ClientChannel(
       host,
       port: port,
       options: grpc.ChannelOptions(
-        credentials: useTls ? const grpc.ChannelCredentials.secure() : const grpc.ChannelCredentials.insecure(),
+        credentials: useTls
+            ? grpc.ChannelCredentials.secure()
+            : grpc.ChannelCredentials.insecure(),
       ),
     );
+  }
+
+  static pbgrpc.AuthServiceClient createAuthClient(grpc.ClientChannel channel) {
+    return pbgrpc.AuthServiceClient(channel);
+  }
+
+  static pbgrpc.ChannelServiceClient createChannelClient(grpc.ClientChannel channel) {
+    return pbgrpc.ChannelServiceClient(channel);
+  }
+
+  static pbgrpc.NotificationServiceClient createNotificationClient(grpc.ClientChannel channel) {
+    return pbgrpc.NotificationServiceClient(channel);
   }
 }
