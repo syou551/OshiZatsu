@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
@@ -18,6 +19,7 @@ import (
 	"github.com/robfig/cron/v3"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -461,29 +463,63 @@ func main() {
 		log.Fatalf("Failed to create server: %v", err)
 	}
 
-	// gRPCサーバーを作成
-	grpcServer := grpc.NewServer()
-
-	// サービスを登録
-	proto.RegisterAuthServiceServer(grpcServer, server)
-	proto.RegisterChannelServiceServer(grpcServer, server)
-	proto.RegisterNotificationServiceServer(grpcServer, server)
-
 	// ポートを取得
 	port := os.Getenv("GRPC_PORT")
 	if port == "" {
 		port = "50051"
 	}
 
-	// リスナーを作成
-	lis, err := net.Listen("tcp", ":"+port)
-	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+	// ホストを取得（デフォルトは全てのインターフェース）
+	host := os.Getenv("GRPC_HOST")
+	if host == "" {
+		host = "127.0.0.1"
 	}
+
+	// SSL設定を確認
+	useTLS := os.Getenv("USE_TLS")
+	var lis net.Listener
+	var grpcServer *grpc.Server
+
+	if useTLS == "true" {
+		// TLS証明書を読み込み
+		cert, err := tls.LoadX509KeyPair("ssl/server.crt", "ssl/server.key")
+		if err != nil {
+			log.Fatalf("Failed to load TLS certificate: %v", err)
+		}
+
+		config := &tls.Config{
+			Certificates: []tls.Certificate{cert},
+		}
+
+		// TLSリスナーを作成
+		lis, err = tls.Listen("tcp", host+":"+port, config)
+		if err != nil {
+			log.Fatalf("Failed to listen with TLS: %v", err)
+		}
+
+		// TLS認証情報でgRPCサーバーを作成
+		creds := credentials.NewTLS(config)
+		grpcServer = grpc.NewServer(grpc.Creds(creds))
+		log.Printf("Server listening with TLS on %s:%s", host, port)
+	} else {
+		// 通常のリスナーを作成
+		lis, err = net.Listen("tcp", host+":"+port)
+		if err != nil {
+			log.Fatalf("Failed to listen: %v", err)
+		}
+
+		grpcServer = grpc.NewServer()
+		log.Printf("Server listening without TLS on %s:%s", host, port)
+	}
+
+	// サービスを登録
+	proto.RegisterAuthServiceServer(grpcServer, server)
+	proto.RegisterChannelServiceServer(grpcServer, server)
+	proto.RegisterNotificationServiceServer(grpcServer, server)
 
 	// YouTube APIチェックの定期実行を開始
 	c := cron.New()
-	c.AddFunc("@every 10m", func() {
+	c.AddFunc("@every 1m", func() {
 		log.Println("Checking for new live streams...")
 		if err := server.youtubeService.CheckForNewLiveStreams(); err != nil {
 			log.Printf("Error checking for new live streams: %v", err)

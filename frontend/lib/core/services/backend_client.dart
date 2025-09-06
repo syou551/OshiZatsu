@@ -8,15 +8,33 @@ class BackendClientFactory {
     required int port,
     bool useTls = false,
   }) {
-    return grpc.ClientChannel(
+    print('Creating gRPC channel: $host:$port (TLS: $useTls)');
+    print('Host type: ${host.runtimeType}, Port type: ${port.runtimeType}');
+    print('Host value: "$host", Port value: $port');
+    
+    // 明示的にホストとポートを指定
+    final channel = grpc.ClientChannel(
       host,
       port: port,
       options: grpc.ChannelOptions(
         credentials: useTls
-            ? grpc.ChannelCredentials.secure()
+            ? grpc.ChannelCredentials.secure(
+                onBadCertificate: (cert, host) {
+                  // Allow self-signed certificates for development
+                  print('Warning: Accepting self-signed certificate for $host');
+                  return true;
+                },
+              )
             : grpc.ChannelCredentials.insecure(),
       ),
     );
+    print('gRPC channel created successfully');
+    print('Channel type: ${channel.runtimeType}');
+    
+    // 接続テスト用のログ
+    print('Attempting to connect to: $host:$port');
+    
+    return channel;
   }
 
   static pbgrpc.AuthServiceClient createAuthClient(grpc.ClientChannel channel) {

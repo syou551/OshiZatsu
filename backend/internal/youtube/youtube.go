@@ -1,6 +1,7 @@
 package youtube
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -10,8 +11,9 @@ import (
 	"time"
 
 	"oshizatsu-backend/internal/models"
+	"oshizatsu-backend/internal/notification"
 
-	"google.golang.org/api/googleapi/transport"
+	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
 
@@ -29,9 +31,11 @@ type RSSFeed struct {
 
 // Entry RSSエントリの構造
 type Entry struct {
-	VideoID string `xml:"videoId"`
-	Title   string `xml:"title"`
-	Updated string `xml:"updated"`
+	ID        string `xml:"id"`
+	VideoID   string `xml:"videoId"`
+	Title     string `xml:"title"`
+	Updated   string `xml:"updated"`
+	Published string `xml:"published"`
 }
 
 // NewYouTubeService 新しいYouTubeサービスを作成
@@ -42,12 +46,8 @@ func NewYouTubeService(db *models.Database) (*YouTubeService, error) {
 		return nil, fmt.Errorf("YOUTUBE_API_KEY environment variable is required")
 	}
 
-	// YouTube APIクライアントを作成
-	client := &http.Client{
-		Transport: &transport.APIKey{Key: apiKey},
-	}
-
-	service, err := youtube.New(client)
+	// YouTube APIサービスを作成
+	service, err := youtube.NewService(context.Background(), option.WithAPIKey(apiKey))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create YouTube service: %v", err)
 	}
@@ -76,13 +76,56 @@ func (y *YouTubeService) GetLatestVideos(channelID string) ([]Entry, error) {
 		return nil, fmt.Errorf("failed to read response body: %v", err)
 	}
 
+	// デバッグ用：レスポンスの最初の100文字をログ出力
+	if os.Getenv("DEBUG") == "true" {
+		if len(body) > 100 {
+			fmt.Printf("RSS Response (first 100 chars): %s\n", string(body[:100]))
+		} else {
+			fmt.Printf("RSS Response: %s\n", string(body))
+		}
+	}
+
 	// XMLをパース
 	var feed RSSFeed
 	if err := xml.Unmarshal(body, &feed); err != nil {
-		return nil, fmt.Errorf("failed to parse RSS feed: %v", err)
+		// エラーの詳細をログ出力
+		fmt.Printf("XML Parse Error: %v\n", err)
+		fmt.Printf("Response body: %s\n", string(body))
+
+		// フォールバック: 文字列検索でvideoIdを抽出
+		return y.extractVideoIdsFromString(string(body))
 	}
 
 	return feed.Entries, nil
+}
+
+// extractVideoIdsFromString 文字列からvideoIdを抽出（フォールバック用）
+func (y *YouTubeService) extractVideoIdsFromString(content string) ([]Entry, error) {
+	var entries []Entry
+
+	// yt:videoIdタグを検索
+	lines := strings.Split(content, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.Contains(line, "<yt:videoId>") && strings.Contains(line, "</yt:videoId>") {
+			start := strings.Index(line, "<yt:videoId>") + len("<yt:videoId>")
+			end := strings.Index(line, "</yt:videoId>")
+			if start < end {
+				videoID := line[start:end]
+				entry := Entry{
+					VideoID: videoID,
+					Title:   "Unknown", // タイトルは後で取得
+				}
+				entries = append(entries, entry)
+			}
+		}
+	}
+
+	if len(entries) == 0 {
+		return nil, fmt.Errorf("no video IDs found in RSS feed")
+	}
+
+	return entries, nil
 }
 
 // GetVideoDetails 動画の詳細情報を取得
@@ -173,11 +216,15 @@ func (y *YouTubeService) checkChannelForNewLiveStreams(channel *models.Channel, 
 
 	if video == nil {
 		return nil
-	}	
+	}
 
-	// 既に処理済みの動画の場合はスキップ
-	if channel.LastVideoID == video.Id {
-		return nil
+	// タイトルに「雑談」を含むかをチェックする
+	// 含まない場合はスキップ
+	// デバッグの時はチェックしない
+	if os.Getenv("DEBUG") != "true" {
+		if !strings.Contains(video.Snippet.Title, "雑談") {
+			return nil
+		}
 	}
 
 	// ライブ配信の情報をチェック
@@ -340,7 +387,7 @@ func (y *YouTubeService) sendStartedNotification(channel *models.Channel, video 
 
 	// 各ユーザーに通知を送信
 	for _, user := range users {
-		notification := models.NewNotification(
+		noticeboard := models.NewNotification(
 			user.ID,
 			channel.ID,
 			channel.Name,
@@ -349,8 +396,19 @@ func (y *YouTubeService) sendStartedNotification(channel *models.Channel, video 
 			"started",
 		)
 
-		if err := y.createNotification(notification); err != nil {
+		if err := y.createNotification(noticeboard); err != nil {
 			fmt.Printf("Failed to create notification for user %s: %v\n", user.ID, err)
+			continue
+		}
+		
+		// FCMで通知を送信
+		notificationService, err := notification.NewNotificationService(y.db)
+		if err != nil {
+			fmt.Printf("Failed to create notification service: %v\n", err)
+			continue
+		}
+		if err := notificationService.SendNotification(noticeboard); err != nil {
+			fmt.Printf("Failed to send notification to user %s: %v\n", user.ID, err)
 			continue
 		}
 	}

@@ -9,7 +9,7 @@ import 'backend_client.dart';
 class AuthService {
   static const String oidcIssuer = String.fromEnvironment(
     'OIDC_ISSUER_URL',
-    defaultValue: 'http://auth.syou551.dev/realms/auth',
+    defaultValue: 'https://auth.syou551.dev/realms/auth',
   );
   static const String oidcClientId = String.fromEnvironment(
     'OIDC_CLIENT_ID',
@@ -27,22 +27,28 @@ class AuthService {
   );
   static const int backendPort = int.fromEnvironment(
     'BACKEND_PORT',
-    defaultValue: 50051,
+    defaultValue: 50052,
   );
 
-  final FlutterAppAuth _appAuth = const FlutterAppAuth();
+  FlutterAppAuth? _appAuth;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
+  FlutterAppAuth get _getAppAuth {
+    _appAuth ??= const FlutterAppAuth();
+    return _appAuth!;
+  }
+
   Future<LoginResult> loginWithOIDC() async {
-    final tokenResult = await _appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(
-        oidcClientId,
-        oidcRedirectUri,
-        discoveryUrl: '$oidcIssuer/.well-known/openid-configuration',
-        scopes: scopes,
-        preferEphemeralSession: false,
-      ),
-    );
+    try {
+      final tokenResult = await _getAppAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          oidcClientId,
+          oidcRedirectUri,
+          discoveryUrl: '$oidcIssuer/.well-known/openid-configuration',
+          scopes: scopes,
+          preferEphemeralSession: false,
+        ),
+      );
 
     final idToken = tokenResult?.idToken;
     if (idToken == null || idToken.isEmpty) {
@@ -50,6 +56,7 @@ class AuthService {
     }
 
     // Call backend Login with OIDC ID token (email field used as ID token per backend contract)
+    print('Backend connection info: $backendHost:$backendPort');
     final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
     final client = BackendClientFactory.createAuthClient(channel);
 
@@ -67,6 +74,10 @@ class AuthService {
       );
     } finally {
       await channel.shutdown();
+    }
+    } catch (e) {
+      print('OAuth authentication error: $e');
+      rethrow;
     }
   }
 
@@ -101,8 +112,8 @@ class AuthService {
     final accessToken = await _secureStorage.read(key: 'access_token');
     if (accessToken == null) return false;
 
-    final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
-    final client = BackendClientFactory.createAuthClient(channel);
+            final channel = BackendClientFactory.createChannel(host: backendHost, port: backendPort, useTls: false);
+      final client = BackendClientFactory.createAuthClient(channel);
     try {
       final resp = await client.updateUserInfo(
         pb.UpdateUserInfoRequest(

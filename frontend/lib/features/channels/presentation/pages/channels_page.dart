@@ -149,11 +149,11 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
 
       try {
         final response = await client.subscribeChannel(
-          pb.SubscribeChannelRequest(
-            accessToken: accessToken,
-            channelId: _channelIdController.text.trim(),
-            channelName: _channelNameController.text.trim(),
-          ),
+                      pb.SubscribeChannelRequest(
+              accessToken: accessToken,
+              channelId: _channelIdController.text.trim(),
+              channelName: _channelNameController.text.trim(),
+            ),
         );
 
         _channelNameController.clear();

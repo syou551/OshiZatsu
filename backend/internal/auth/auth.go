@@ -70,6 +70,25 @@ func (a *AuthService) GenerateToken(userID string) (string, error) {
 func (a *AuthService) ValidateToken(ctx context.Context, accessToken string) (*models.User, error) {
 	// TEST_MODE=true の場合は従来ロジック（トークン=ユーザーID）を使用
 	if getEnv("TEST_MODE", "false") == "true" || a.rp == nil {
+		// トークンがJWT形式の場合は、クレームからユーザー情報を取得
+		if looksLikeJWT(accessToken) {
+			email, name, picture := extractClaims(accessToken)
+			if email != "" {
+				if u, err := a.getUserByEmail(email); err == nil && u != nil {
+					return u, nil
+				}
+			}
+			if name == "" {
+				if email != "" {
+					name = email
+				} else {
+					name = "User"
+				}
+			}
+			return a.CreateUser(email, name, picture)
+		}
+
+		// 従来のUUID形式のトークンの場合
 		userID := accessToken
 		user, err := a.getUserByID(userID)
 		if err != nil {
@@ -78,12 +97,7 @@ func (a *AuthService) ValidateToken(ctx context.Context, accessToken string) (*m
 		return user, nil
 	}
 
-	// IDトークン検証（Zitadel OIDC）
-	/*
-		if _, err := rp.VerifyIDToken[*oidc.IDTokenClaims](ctx, accessToken, a.rp.IDTokenVerifier()); err != nil {
-			return nil, fmt.Errorf("invalid token: %v", err)
-		}*/
-
+	// OIDCモードの場合
 	// クレーム抽出（ペイロードをデコード）
 	email, name, picture := extractClaims(accessToken)
 	if email != "" {
@@ -176,6 +190,14 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+// looksLikeJWT は文字列がJWT形式かどうかを判定する
+func looksLikeJWT(s string) bool {
+	if s == "" {
+		return false
+	}
+	return strings.Count(s, ".") == 2
 }
 
 // extractClaims はJWTのペイロードを安全にデコードしてよく使うクレームを返す

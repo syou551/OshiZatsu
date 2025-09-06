@@ -1,0 +1,21 @@
+2025/08/30 18:25:47 Warning: .env file not found
+2025/08/30 18:25:47 Successfully connected to database
+2025/08/30 18:25:47 Executed migration query 1
+2025/08/30 18:25:47 Executed migration query 2
+2025/08/30 18:25:47 Executed migration query 3
+2025/08/30 18:25:47 Executed migration query 4
+2025/08/30 18:25:47 Executed migration query 5
+2025/08/30 18:25:47 Executed migration query 6
+2025/08/30 18:25:47 Executed migration query 7
+2025/08/30 18:25:47 Executed migration query 8
+2025/08/30 18:25:47 Executed migration query 9
+2025/08/30 18:25:47 Executed migration query 10
+2025/08/30 18:25:47 Executed migration query 11
+2025/08/30 18:25:47 Executed migration query 12
+2025/08/30 18:25:47 Executed migration query 13
+2025/08/30 18:25:47 Executed migration query 14
+2025/08/30 18:25:47 Executed migration query 15
+2025/08/30 18:25:47 Database migration completed successfully
+2025/08/30 18:25:47 Server listening without TLS on 0.0.0.0:50052
+2025/08/30 18:25:47 Server listening on port 50052
+signal: terminated

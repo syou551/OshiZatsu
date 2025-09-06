@@ -29,10 +29,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         context.go('/channels');
       }
     } catch (e) {
+      print('Login error: $e');
       if (mounted) {
+        String errorMessage = 'OIDCログインに失敗しました';
+        if (e.toString().contains('only https connections are permitted')) {
+          errorMessage = 'OAuth認証エラー: HTTPS接続が必要です';
+        } else if (e.toString().contains('FIS_AUTH_ERROR')) {
+          errorMessage = 'Firebase認証エラー: 開発環境では正常です';
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('OIDCログインに失敗しました: $e'),
+            content: Text(errorMessage),
             backgroundColor: AppTheme.errorColor,
           ),
         );

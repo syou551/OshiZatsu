@@ -27,16 +27,16 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.frontend"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -52,6 +52,13 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        
+        manifestPlaceholders = [
+            appAuthRedirectScheme: "com.example.frontend",
+            applicationName: "com.example.frontend.MainApplication"
+        ]
+        
+
     }
 
     buildTypes {

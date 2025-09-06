@@ -18,13 +18,13 @@ run:
 	env $$(grep -v '^#' ./credential/.env | xargs) go run ./cmd/server
 
 db-up:
-	docker compose -f docker-compose.test.yml up -d db
+	docker compose -f docker-compose.test.yml up -d postgres-test
 
 db-down:
 	docker compose -f docker-compose.test.yml down
 
 db-logs:
-	docker compose -f docker-compose.test.yml logs -f db
+	docker compose -f docker-compose.test.yml logs -f postgres-test
 
 tidy:
 	go mod tidy

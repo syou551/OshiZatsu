@@ -1,11 +1,16 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:oshizatsu_frontend/core/services/backend_client.dart';
+import 'package:oshizatsu_frontend/generated/oshizatsu.pb.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:oshizatsu_frontend/core/services/auth_service.dart';
 
 class FirebaseService {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
-
+  static final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   static Future<void> initialize() async {
     try {
       // 通知権限をリクエスト
@@ -33,6 +38,10 @@ class FirebaseService {
         print('FCM Token: $token');
       } catch (e) {
         print('Failed to get FCM token: $e');
+        // FIS_AUTH_ERRORは一般的なエラーで、アプリの動作には影響しない
+        if (e.toString().contains('FIS_AUTH_ERROR')) {
+          print('Firebase authentication error - this is normal for development builds');
+        }
         // トークン取得に失敗してもアプリは動作を続ける
       }
 
@@ -47,9 +56,35 @@ class FirebaseService {
 
       // 通知タップハンドラー
       FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+
+      // バックエンドにFCMトークンを登録
+      await _registerFCMToken();
     } catch (e) {
       print('Firebase Service initialization error: $e');
       // 初期化に失敗してもアプリは動作を続ける
+    }
+  }
+
+  // gRPCのBackendClientを使用してFCMトークンを登録
+  static Future<void> _registerFCMToken() async {
+    try {
+      final token = await _messaging.getToken();
+      final accessToken = await _secureStorage.read(key: 'access_token');
+      
+      if (token == null || accessToken == null) {
+        print('FCM Token or access token is null, skipping registration');
+        return;
+      }
+      
+      print('FCM Token: $token');
+      final channel = BackendClientFactory.createChannel(host: AuthService.backendHost, port: AuthService.backendPort, useTls: false);
+      final backendClient = BackendClientFactory.createNotificationClient(channel);
+      
+      // uuidなど適切にリクエストを形成して登録を行う
+      final resp = await backendClient.registerFCMToken(RegisterFCMTokenRequest(fcmToken: token, accessToken: accessToken));
+      print('FCM Token registered: $resp');
+    } catch (e) {
+      print('Failed to register FCM token: $e');
     }
   }
 
@@ -102,6 +137,8 @@ class FirebaseService {
   static void _handleNotificationTap(RemoteMessage message) {
     print('Notification tapped: ${message.data}');
     // TODO: 通知タップ時の処理を実装
+    // アプリを開く
+    // FlutterApp.app.then((app) => app.navigate('/channels'));
   }
 
   static void _onNotificationTapped(NotificationResponse response) {
