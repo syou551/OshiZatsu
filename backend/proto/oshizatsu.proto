@@ -26,6 +26,8 @@ service NotificationService {
   rpc RegisterFCMToken(RegisterFCMTokenRequest) returns (RegisterFCMTokenResponse);
   rpc UnregisterFCMToken(UnregisterFCMTokenRequest) returns (UnregisterFCMTokenResponse);
   rpc GetNotifications(GetNotificationsRequest) returns (GetNotificationsResponse);
+  rpc MarkNotificationAsRead(MarkNotificationAsReadRequest) returns (MarkNotificationAsReadResponse);
+  rpc DeleteNotification(DeleteNotificationRequest) returns (DeleteNotificationResponse);
 }
 
 // 認証関連のメッセージ
@@ -159,4 +161,24 @@ message Notification {
 enum NotificationType {
   SCHEDULED = 0;
   STARTED = 1;
+}
+
+message MarkNotificationAsReadRequest {
+  string notification_id = 1;
+  string access_token = 2;
+}
+
+message MarkNotificationAsReadResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message DeleteNotificationRequest {
+  string notification_id = 1;
+  string access_token = 2;
+}
+
+message DeleteNotificationResponse {
+  bool success = 1;
+  string message = 2;
 }

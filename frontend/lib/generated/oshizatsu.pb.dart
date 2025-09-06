@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../google/protobuf/timestamp.pb.dart' as $1;
+import '../../google/protobuf/timestamp.pb.dart' as $1;
 import 'oshizatsu.pbenum.dart';
 
 export 'oshizatsu.pbenum.dart';
@@ -1629,6 +1629,262 @@ class Notification extends $pb.GeneratedMessage {
   $core.bool hasIsRead() => $_has(7);
   @$pb.TagNumber(8)
   void clearIsRead() => clearField(8);
+}
+
+class MarkNotificationAsReadRequest extends $pb.GeneratedMessage {
+  factory MarkNotificationAsReadRequest({
+    $core.String? notificationId,
+    $core.String? accessToken,
+  }) {
+    final $result = create();
+    if (notificationId != null) {
+      $result.notificationId = notificationId;
+    }
+    if (accessToken != null) {
+      $result.accessToken = accessToken;
+    }
+    return $result;
+  }
+  MarkNotificationAsReadRequest._() : super();
+  factory MarkNotificationAsReadRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MarkNotificationAsReadRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MarkNotificationAsReadRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'oshizatsu'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'notificationId')
+    ..aOS(2, _omitFieldNames ? '' : 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MarkNotificationAsReadRequest clone() => MarkNotificationAsReadRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MarkNotificationAsReadRequest copyWith(void Function(MarkNotificationAsReadRequest) updates) => super.copyWith((message) => updates(message as MarkNotificationAsReadRequest)) as MarkNotificationAsReadRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MarkNotificationAsReadRequest create() => MarkNotificationAsReadRequest._();
+  MarkNotificationAsReadRequest createEmptyInstance() => create();
+  static $pb.PbList<MarkNotificationAsReadRequest> createRepeated() => $pb.PbList<MarkNotificationAsReadRequest>();
+  @$core.pragma('dart2js:noInline')
+  static MarkNotificationAsReadRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MarkNotificationAsReadRequest>(create);
+  static MarkNotificationAsReadRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get notificationId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set notificationId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNotificationId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNotificationId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accessToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accessToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAccessToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccessToken() => clearField(2);
+}
+
+class MarkNotificationAsReadResponse extends $pb.GeneratedMessage {
+  factory MarkNotificationAsReadResponse({
+    $core.bool? success,
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (success != null) {
+      $result.success = success;
+    }
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
+  MarkNotificationAsReadResponse._() : super();
+  factory MarkNotificationAsReadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MarkNotificationAsReadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MarkNotificationAsReadResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'oshizatsu'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MarkNotificationAsReadResponse clone() => MarkNotificationAsReadResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MarkNotificationAsReadResponse copyWith(void Function(MarkNotificationAsReadResponse) updates) => super.copyWith((message) => updates(message as MarkNotificationAsReadResponse)) as MarkNotificationAsReadResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MarkNotificationAsReadResponse create() => MarkNotificationAsReadResponse._();
+  MarkNotificationAsReadResponse createEmptyInstance() => create();
+  static $pb.PbList<MarkNotificationAsReadResponse> createRepeated() => $pb.PbList<MarkNotificationAsReadResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MarkNotificationAsReadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MarkNotificationAsReadResponse>(create);
+  static MarkNotificationAsReadResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => clearField(2);
+}
+
+class DeleteNotificationRequest extends $pb.GeneratedMessage {
+  factory DeleteNotificationRequest({
+    $core.String? notificationId,
+    $core.String? accessToken,
+  }) {
+    final $result = create();
+    if (notificationId != null) {
+      $result.notificationId = notificationId;
+    }
+    if (accessToken != null) {
+      $result.accessToken = accessToken;
+    }
+    return $result;
+  }
+  DeleteNotificationRequest._() : super();
+  factory DeleteNotificationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteNotificationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteNotificationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'oshizatsu'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'notificationId')
+    ..aOS(2, _omitFieldNames ? '' : 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteNotificationRequest clone() => DeleteNotificationRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteNotificationRequest copyWith(void Function(DeleteNotificationRequest) updates) => super.copyWith((message) => updates(message as DeleteNotificationRequest)) as DeleteNotificationRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteNotificationRequest create() => DeleteNotificationRequest._();
+  DeleteNotificationRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteNotificationRequest> createRepeated() => $pb.PbList<DeleteNotificationRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteNotificationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteNotificationRequest>(create);
+  static DeleteNotificationRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get notificationId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set notificationId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNotificationId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNotificationId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accessToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accessToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAccessToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccessToken() => clearField(2);
+}
+
+class DeleteNotificationResponse extends $pb.GeneratedMessage {
+  factory DeleteNotificationResponse({
+    $core.bool? success,
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (success != null) {
+      $result.success = success;
+    }
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
+  DeleteNotificationResponse._() : super();
+  factory DeleteNotificationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteNotificationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteNotificationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'oshizatsu'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteNotificationResponse clone() => DeleteNotificationResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteNotificationResponse copyWith(void Function(DeleteNotificationResponse) updates) => super.copyWith((message) => updates(message as DeleteNotificationResponse)) as DeleteNotificationResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteNotificationResponse create() => DeleteNotificationResponse._();
+  DeleteNotificationResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteNotificationResponse> createRepeated() => $pb.PbList<DeleteNotificationResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteNotificationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteNotificationResponse>(create);
+  static DeleteNotificationResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => clearField(2);
 }
 
 

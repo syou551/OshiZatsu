@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/theme_service.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -16,12 +17,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _notificationsEnabled = true;
   bool _scheduledNotificationsEnabled = true;
   bool _startedNotificationsEnabled = true;
-  bool _darkModeEnabled = false;
 
   final authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final themeState = ref.watch(themeServiceProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -83,12 +85,33 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             child: SwitchListTile(
               title: const Text('ダークモード'),
               subtitle: const Text('ダークテーマを有効にします'),
-              value: _darkModeEnabled,
+              value: themeState.isDarkMode,
               onChanged: (value) {
-                setState(() {
-                  _darkModeEnabled = value;
-                });
-                // TODO: テーマ切り替えを実装
+                ref.read(themeServiceProvider.notifier).setDarkMode(value);
+              },
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: ListTile(
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: themeState.selectedColor.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.palette,
+                  color: themeState.selectedColor.primaryColor,
+                  size: 20,
+                ),
+              ),
+              title: const Text('テーマ色'),
+              subtitle: Text('現在: ${themeState.selectedColor.name}'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _showThemeColorDialog();
               },
             ),
           ),
@@ -269,15 +292,80 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Widget _buildSectionHeader(String title) {
+    final themeState = ref.watch(themeServiceProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.bold,
-          color: AppTheme.primaryColor,
+          color: themeState.selectedColor.primaryColor,
           letterSpacing: 0.5,
         ),
+      ),
+    );
+  }
+
+  void _showThemeColorDialog() {
+    final themeState = ref.read(themeServiceProvider);
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('テーマ色を選択'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1,
+            ),
+            itemCount: PresetThemeColors.colors.length,
+            itemBuilder: (context, index) {
+              final color = PresetThemeColors.colors[index];
+              final isSelected = color.name == themeState.selectedColor.name;
+              
+              return GestureDetector(
+                onTap: () {
+                  ref.read(themeServiceProvider.notifier).setThemeColor(color);
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color.primaryColor,
+                    shape: BoxShape.circle,
+                    border: isSelected
+                        ? Border.all(color: Colors.white, width: 3)
+                        : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.primaryColor.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: isSelected
+                      ? const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 24,
+                        )
+                      : null,
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('キャンセル'),
+          ),
+        ],
       ),
     );
   }

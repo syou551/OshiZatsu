@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'core/theme/app_theme.dart';
+import 'core/services/fcm_provider.dart';
+import 'core/services/theme_service.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/channels/presentation/pages/channels_page.dart';
 import 'features/notifications/presentation/pages/notifications_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
 import 'features/profile/presentation/pages/profile_edit_page.dart';
 
-class OshiZatsuApp extends StatelessWidget {
+class OshiZatsuApp extends ConsumerWidget {
   const OshiZatsuApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // FCMサービスを初期化
+    ref.watch(fcmInitializerProvider);
+    
+    // テーマサービスを監視
+    final themeService = ref.read(themeServiceProvider.notifier);
+    
     return MaterialApp.router(
       title: '推し雑',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: themeService.currentTheme,
       routerConfig: _router,
     );
   }
@@ -53,13 +60,15 @@ final _router = GoRouter(
   ],
 );
 
-class MainScaffold extends StatelessWidget {
+class MainScaffold extends ConsumerWidget {
   final Widget child;
 
   const MainScaffold({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeState = ref.watch(themeServiceProvider);
+    
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
@@ -76,8 +85,8 @@ class MainScaffold extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           currentIndex: _getCurrentIndex(context),
           onTap: (index) => _onTap(context, index),
-          selectedItemColor: AppTheme.primaryColor,
-          unselectedItemColor: AppTheme.textSecondaryColor,
+          selectedItemColor: themeState.selectedColor.primaryColor,
+          unselectedItemColor: themeState.isDarkMode ? Colors.grey : const Color(0xFF6C757D),
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
           items: const [

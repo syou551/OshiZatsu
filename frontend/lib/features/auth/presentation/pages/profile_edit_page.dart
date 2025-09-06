@@ -166,7 +166,8 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                           ),
                           validator: (value) {
                             if (value != null && value.isNotEmpty) {
-                              if (!Uri.tryParse(value)?.hasAbsolutePath ?? false) {
+                              final uri = Uri.tryParse(value);
+                            if (uri == null || !uri.hasAbsolutePath) {
                                 return '有効なURLを入力してください';
                               }
                             }

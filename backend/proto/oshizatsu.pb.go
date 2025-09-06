@@ -1347,6 +1347,214 @@ func (x *Notification) GetIsRead() bool {
 	return false
 }
 
+type MarkNotificationAsReadRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	NotificationId string                 `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`
+	AccessToken    string                 `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *MarkNotificationAsReadRequest) Reset() {
+	*x = MarkNotificationAsReadRequest{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkNotificationAsReadRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkNotificationAsReadRequest) ProtoMessage() {}
+
+func (x *MarkNotificationAsReadRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkNotificationAsReadRequest.ProtoReflect.Descriptor instead.
+func (*MarkNotificationAsReadRequest) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *MarkNotificationAsReadRequest) GetNotificationId() string {
+	if x != nil {
+		return x.NotificationId
+	}
+	return ""
+}
+
+func (x *MarkNotificationAsReadRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+type MarkNotificationAsReadResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkNotificationAsReadResponse) Reset() {
+	*x = MarkNotificationAsReadResponse{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkNotificationAsReadResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkNotificationAsReadResponse) ProtoMessage() {}
+
+func (x *MarkNotificationAsReadResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkNotificationAsReadResponse.ProtoReflect.Descriptor instead.
+func (*MarkNotificationAsReadResponse) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *MarkNotificationAsReadResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *MarkNotificationAsReadResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type DeleteNotificationRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	NotificationId string                 `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`
+	AccessToken    string                 `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *DeleteNotificationRequest) Reset() {
+	*x = DeleteNotificationRequest{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteNotificationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteNotificationRequest) ProtoMessage() {}
+
+func (x *DeleteNotificationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteNotificationRequest.ProtoReflect.Descriptor instead.
+func (*DeleteNotificationRequest) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *DeleteNotificationRequest) GetNotificationId() string {
+	if x != nil {
+		return x.NotificationId
+	}
+	return ""
+}
+
+func (x *DeleteNotificationRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+type DeleteNotificationResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteNotificationResponse) Reset() {
+	*x = DeleteNotificationResponse{}
+	mi := &file_proto_oshizatsu_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteNotificationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteNotificationResponse) ProtoMessage() {}
+
+func (x *DeleteNotificationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_oshizatsu_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteNotificationResponse.ProtoReflect.Descriptor instead.
+func (*DeleteNotificationResponse) Descriptor() ([]byte, []int) {
+	return file_proto_oshizatsu_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *DeleteNotificationResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteNotificationResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_proto_oshizatsu_proto protoreflect.FileDescriptor
 
 const file_proto_oshizatsu_proto_rawDesc = "" +
@@ -1436,7 +1644,19 @@ const file_proto_oshizatsu_proto_rawDesc = "" +
 	"\x04type\x18\x06 \x01(\x0e2\x1b.oshizatsu.NotificationTypeR\x04type\x129\n" +
 	"\n" +
 	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12\x17\n" +
-	"\ais_read\x18\b \x01(\bR\x06isRead*.\n" +
+	"\ais_read\x18\b \x01(\bR\x06isRead\"k\n" +
+	"\x1dMarkNotificationAsReadRequest\x12'\n" +
+	"\x0fnotification_id\x18\x01 \x01(\tR\x0enotificationId\x12!\n" +
+	"\faccess_token\x18\x02 \x01(\tR\vaccessToken\"T\n" +
+	"\x1eMarkNotificationAsReadResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"g\n" +
+	"\x19DeleteNotificationRequest\x12'\n" +
+	"\x0fnotification_id\x18\x01 \x01(\tR\x0enotificationId\x12!\n" +
+	"\faccess_token\x18\x02 \x01(\tR\vaccessToken\"P\n" +
+	"\x1aDeleteNotificationResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage*.\n" +
 	"\x10NotificationType\x12\r\n" +
 	"\tSCHEDULED\x10\x00\x12\v\n" +
 	"\aSTARTED\x10\x012\xad\x02\n" +
@@ -1448,11 +1668,13 @@ const file_proto_oshizatsu_proto_rawDesc = "" +
 	"\x0eChannelService\x12[\n" +
 	"\x10SubscribeChannel\x12\".oshizatsu.SubscribeChannelRequest\x1a#.oshizatsu.SubscribeChannelResponse\x12a\n" +
 	"\x12UnsubscribeChannel\x12$.oshizatsu.UnsubscribeChannelRequest\x1a%.oshizatsu.UnsubscribeChannelResponse\x12j\n" +
-	"\x15GetSubscribedChannels\x12'.oshizatsu.GetSubscribedChannelsRequest\x1a(.oshizatsu.GetSubscribedChannelsResponse2\xb2\x02\n" +
+	"\x15GetSubscribedChannels\x12'.oshizatsu.GetSubscribedChannelsRequest\x1a(.oshizatsu.GetSubscribedChannelsResponse2\x84\x04\n" +
 	"\x13NotificationService\x12[\n" +
 	"\x10RegisterFCMToken\x12\".oshizatsu.RegisterFCMTokenRequest\x1a#.oshizatsu.RegisterFCMTokenResponse\x12a\n" +
 	"\x12UnregisterFCMToken\x12$.oshizatsu.UnregisterFCMTokenRequest\x1a%.oshizatsu.UnregisterFCMTokenResponse\x12[\n" +
-	"\x10GetNotifications\x12\".oshizatsu.GetNotificationsRequest\x1a#.oshizatsu.GetNotificationsResponseB\x19Z\x17oshizatsu-backend/protob\x06proto3"
+	"\x10GetNotifications\x12\".oshizatsu.GetNotificationsRequest\x1a#.oshizatsu.GetNotificationsResponse\x12m\n" +
+	"\x16MarkNotificationAsRead\x12(.oshizatsu.MarkNotificationAsReadRequest\x1a).oshizatsu.MarkNotificationAsReadResponse\x12a\n" +
+	"\x12DeleteNotification\x12$.oshizatsu.DeleteNotificationRequest\x1a%.oshizatsu.DeleteNotificationResponseB\x19Z\x17oshizatsu-backend/protob\x06proto3"
 
 var (
 	file_proto_oshizatsu_proto_rawDescOnce sync.Once
@@ -1467,43 +1689,47 @@ func file_proto_oshizatsu_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_oshizatsu_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_oshizatsu_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_proto_oshizatsu_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_proto_oshizatsu_proto_goTypes = []any{
-	(NotificationType)(0),                 // 0: oshizatsu.NotificationType
-	(*LoginRequest)(nil),                  // 1: oshizatsu.LoginRequest
-	(*LoginResponse)(nil),                 // 2: oshizatsu.LoginResponse
-	(*LogoutRequest)(nil),                 // 3: oshizatsu.LogoutRequest
-	(*LogoutResponse)(nil),                // 4: oshizatsu.LogoutResponse
-	(*GetUserInfoRequest)(nil),            // 5: oshizatsu.GetUserInfoRequest
-	(*GetUserInfoResponse)(nil),           // 6: oshizatsu.GetUserInfoResponse
-	(*UpdateUserInfoRequest)(nil),         // 7: oshizatsu.UpdateUserInfoRequest
-	(*UpdateUserInfoResponse)(nil),        // 8: oshizatsu.UpdateUserInfoResponse
-	(*UserInfo)(nil),                      // 9: oshizatsu.UserInfo
-	(*SubscribeChannelRequest)(nil),       // 10: oshizatsu.SubscribeChannelRequest
-	(*SubscribeChannelResponse)(nil),      // 11: oshizatsu.SubscribeChannelResponse
-	(*UnsubscribeChannelRequest)(nil),     // 12: oshizatsu.UnsubscribeChannelRequest
-	(*UnsubscribeChannelResponse)(nil),    // 13: oshizatsu.UnsubscribeChannelResponse
-	(*GetSubscribedChannelsRequest)(nil),  // 14: oshizatsu.GetSubscribedChannelsRequest
-	(*GetSubscribedChannelsResponse)(nil), // 15: oshizatsu.GetSubscribedChannelsResponse
-	(*Channel)(nil),                       // 16: oshizatsu.Channel
-	(*RegisterFCMTokenRequest)(nil),       // 17: oshizatsu.RegisterFCMTokenRequest
-	(*RegisterFCMTokenResponse)(nil),      // 18: oshizatsu.RegisterFCMTokenResponse
-	(*UnregisterFCMTokenRequest)(nil),     // 19: oshizatsu.UnregisterFCMTokenRequest
-	(*UnregisterFCMTokenResponse)(nil),    // 20: oshizatsu.UnregisterFCMTokenResponse
-	(*GetNotificationsRequest)(nil),       // 21: oshizatsu.GetNotificationsRequest
-	(*GetNotificationsResponse)(nil),      // 22: oshizatsu.GetNotificationsResponse
-	(*Notification)(nil),                  // 23: oshizatsu.Notification
-	(*timestamppb.Timestamp)(nil),         // 24: google.protobuf.Timestamp
+	(NotificationType)(0),                  // 0: oshizatsu.NotificationType
+	(*LoginRequest)(nil),                   // 1: oshizatsu.LoginRequest
+	(*LoginResponse)(nil),                  // 2: oshizatsu.LoginResponse
+	(*LogoutRequest)(nil),                  // 3: oshizatsu.LogoutRequest
+	(*LogoutResponse)(nil),                 // 4: oshizatsu.LogoutResponse
+	(*GetUserInfoRequest)(nil),             // 5: oshizatsu.GetUserInfoRequest
+	(*GetUserInfoResponse)(nil),            // 6: oshizatsu.GetUserInfoResponse
+	(*UpdateUserInfoRequest)(nil),          // 7: oshizatsu.UpdateUserInfoRequest
+	(*UpdateUserInfoResponse)(nil),         // 8: oshizatsu.UpdateUserInfoResponse
+	(*UserInfo)(nil),                       // 9: oshizatsu.UserInfo
+	(*SubscribeChannelRequest)(nil),        // 10: oshizatsu.SubscribeChannelRequest
+	(*SubscribeChannelResponse)(nil),       // 11: oshizatsu.SubscribeChannelResponse
+	(*UnsubscribeChannelRequest)(nil),      // 12: oshizatsu.UnsubscribeChannelRequest
+	(*UnsubscribeChannelResponse)(nil),     // 13: oshizatsu.UnsubscribeChannelResponse
+	(*GetSubscribedChannelsRequest)(nil),   // 14: oshizatsu.GetSubscribedChannelsRequest
+	(*GetSubscribedChannelsResponse)(nil),  // 15: oshizatsu.GetSubscribedChannelsResponse
+	(*Channel)(nil),                        // 16: oshizatsu.Channel
+	(*RegisterFCMTokenRequest)(nil),        // 17: oshizatsu.RegisterFCMTokenRequest
+	(*RegisterFCMTokenResponse)(nil),       // 18: oshizatsu.RegisterFCMTokenResponse
+	(*UnregisterFCMTokenRequest)(nil),      // 19: oshizatsu.UnregisterFCMTokenRequest
+	(*UnregisterFCMTokenResponse)(nil),     // 20: oshizatsu.UnregisterFCMTokenResponse
+	(*GetNotificationsRequest)(nil),        // 21: oshizatsu.GetNotificationsRequest
+	(*GetNotificationsResponse)(nil),       // 22: oshizatsu.GetNotificationsResponse
+	(*Notification)(nil),                   // 23: oshizatsu.Notification
+	(*MarkNotificationAsReadRequest)(nil),  // 24: oshizatsu.MarkNotificationAsReadRequest
+	(*MarkNotificationAsReadResponse)(nil), // 25: oshizatsu.MarkNotificationAsReadResponse
+	(*DeleteNotificationRequest)(nil),      // 26: oshizatsu.DeleteNotificationRequest
+	(*DeleteNotificationResponse)(nil),     // 27: oshizatsu.DeleteNotificationResponse
+	(*timestamppb.Timestamp)(nil),          // 28: google.protobuf.Timestamp
 }
 var file_proto_oshizatsu_proto_depIdxs = []int32{
 	9,  // 0: oshizatsu.LoginResponse.user_info:type_name -> oshizatsu.UserInfo
 	9,  // 1: oshizatsu.GetUserInfoResponse.user_info:type_name -> oshizatsu.UserInfo
 	9,  // 2: oshizatsu.UpdateUserInfoResponse.user_info:type_name -> oshizatsu.UserInfo
 	16, // 3: oshizatsu.GetSubscribedChannelsResponse.channels:type_name -> oshizatsu.Channel
-	24, // 4: oshizatsu.Channel.last_live_scheduled:type_name -> google.protobuf.Timestamp
+	28, // 4: oshizatsu.Channel.last_live_scheduled:type_name -> google.protobuf.Timestamp
 	23, // 5: oshizatsu.GetNotificationsResponse.notifications:type_name -> oshizatsu.Notification
 	0,  // 6: oshizatsu.Notification.type:type_name -> oshizatsu.NotificationType
-	24, // 7: oshizatsu.Notification.created_at:type_name -> google.protobuf.Timestamp
+	28, // 7: oshizatsu.Notification.created_at:type_name -> google.protobuf.Timestamp
 	1,  // 8: oshizatsu.AuthService.Login:input_type -> oshizatsu.LoginRequest
 	3,  // 9: oshizatsu.AuthService.Logout:input_type -> oshizatsu.LogoutRequest
 	5,  // 10: oshizatsu.AuthService.GetUserInfo:input_type -> oshizatsu.GetUserInfoRequest
@@ -1514,18 +1740,22 @@ var file_proto_oshizatsu_proto_depIdxs = []int32{
 	17, // 15: oshizatsu.NotificationService.RegisterFCMToken:input_type -> oshizatsu.RegisterFCMTokenRequest
 	19, // 16: oshizatsu.NotificationService.UnregisterFCMToken:input_type -> oshizatsu.UnregisterFCMTokenRequest
 	21, // 17: oshizatsu.NotificationService.GetNotifications:input_type -> oshizatsu.GetNotificationsRequest
-	2,  // 18: oshizatsu.AuthService.Login:output_type -> oshizatsu.LoginResponse
-	4,  // 19: oshizatsu.AuthService.Logout:output_type -> oshizatsu.LogoutResponse
-	6,  // 20: oshizatsu.AuthService.GetUserInfo:output_type -> oshizatsu.GetUserInfoResponse
-	8,  // 21: oshizatsu.AuthService.UpdateUserInfo:output_type -> oshizatsu.UpdateUserInfoResponse
-	11, // 22: oshizatsu.ChannelService.SubscribeChannel:output_type -> oshizatsu.SubscribeChannelResponse
-	13, // 23: oshizatsu.ChannelService.UnsubscribeChannel:output_type -> oshizatsu.UnsubscribeChannelResponse
-	15, // 24: oshizatsu.ChannelService.GetSubscribedChannels:output_type -> oshizatsu.GetSubscribedChannelsResponse
-	18, // 25: oshizatsu.NotificationService.RegisterFCMToken:output_type -> oshizatsu.RegisterFCMTokenResponse
-	20, // 26: oshizatsu.NotificationService.UnregisterFCMToken:output_type -> oshizatsu.UnregisterFCMTokenResponse
-	22, // 27: oshizatsu.NotificationService.GetNotifications:output_type -> oshizatsu.GetNotificationsResponse
-	18, // [18:28] is the sub-list for method output_type
-	8,  // [8:18] is the sub-list for method input_type
+	24, // 18: oshizatsu.NotificationService.MarkNotificationAsRead:input_type -> oshizatsu.MarkNotificationAsReadRequest
+	26, // 19: oshizatsu.NotificationService.DeleteNotification:input_type -> oshizatsu.DeleteNotificationRequest
+	2,  // 20: oshizatsu.AuthService.Login:output_type -> oshizatsu.LoginResponse
+	4,  // 21: oshizatsu.AuthService.Logout:output_type -> oshizatsu.LogoutResponse
+	6,  // 22: oshizatsu.AuthService.GetUserInfo:output_type -> oshizatsu.GetUserInfoResponse
+	8,  // 23: oshizatsu.AuthService.UpdateUserInfo:output_type -> oshizatsu.UpdateUserInfoResponse
+	11, // 24: oshizatsu.ChannelService.SubscribeChannel:output_type -> oshizatsu.SubscribeChannelResponse
+	13, // 25: oshizatsu.ChannelService.UnsubscribeChannel:output_type -> oshizatsu.UnsubscribeChannelResponse
+	15, // 26: oshizatsu.ChannelService.GetSubscribedChannels:output_type -> oshizatsu.GetSubscribedChannelsResponse
+	18, // 27: oshizatsu.NotificationService.RegisterFCMToken:output_type -> oshizatsu.RegisterFCMTokenResponse
+	20, // 28: oshizatsu.NotificationService.UnregisterFCMToken:output_type -> oshizatsu.UnregisterFCMTokenResponse
+	22, // 29: oshizatsu.NotificationService.GetNotifications:output_type -> oshizatsu.GetNotificationsResponse
+	25, // 30: oshizatsu.NotificationService.MarkNotificationAsRead:output_type -> oshizatsu.MarkNotificationAsReadResponse
+	27, // 31: oshizatsu.NotificationService.DeleteNotification:output_type -> oshizatsu.DeleteNotificationResponse
+	20, // [20:32] is the sub-list for method output_type
+	8,  // [8:20] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -1542,7 +1772,7 @@ func file_proto_oshizatsu_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_oshizatsu_proto_rawDesc), len(file_proto_oshizatsu_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   23,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   3,
 		},

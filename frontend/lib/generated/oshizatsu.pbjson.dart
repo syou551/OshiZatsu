@@ -365,3 +365,59 @@ final $typed_data.Uint8List notificationDescriptor = $convert.base64Decode(
     '90aWZpY2F0aW9uVHlwZVIEdHlwZRI5CgpjcmVhdGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3Rv'
     'YnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EhcKB2lzX3JlYWQYCCABKAhSBmlzUmVhZA==');
 
+@$core.Deprecated('Use markNotificationAsReadRequestDescriptor instead')
+const MarkNotificationAsReadRequest$json = {
+  '1': 'MarkNotificationAsReadRequest',
+  '2': [
+    {'1': 'notification_id', '3': 1, '4': 1, '5': 9, '10': 'notificationId'},
+    {'1': 'access_token', '3': 2, '4': 1, '5': 9, '10': 'accessToken'},
+  ],
+};
+
+/// Descriptor for `MarkNotificationAsReadRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List markNotificationAsReadRequestDescriptor = $convert.base64Decode(
+    'Ch1NYXJrTm90aWZpY2F0aW9uQXNSZWFkUmVxdWVzdBInCg9ub3RpZmljYXRpb25faWQYASABKA'
+    'lSDm5vdGlmaWNhdGlvbklkEiEKDGFjY2Vzc190b2tlbhgCIAEoCVILYWNjZXNzVG9rZW4=');
+
+@$core.Deprecated('Use markNotificationAsReadResponseDescriptor instead')
+const MarkNotificationAsReadResponse$json = {
+  '1': 'MarkNotificationAsReadResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `MarkNotificationAsReadResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List markNotificationAsReadResponseDescriptor = $convert.base64Decode(
+    'Ch5NYXJrTm90aWZpY2F0aW9uQXNSZWFkUmVzcG9uc2USGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2'
+    'VzcxIYCgdtZXNzYWdlGAIgASgJUgdtZXNzYWdl');
+
+@$core.Deprecated('Use deleteNotificationRequestDescriptor instead')
+const DeleteNotificationRequest$json = {
+  '1': 'DeleteNotificationRequest',
+  '2': [
+    {'1': 'notification_id', '3': 1, '4': 1, '5': 9, '10': 'notificationId'},
+    {'1': 'access_token', '3': 2, '4': 1, '5': 9, '10': 'accessToken'},
+  ],
+};
+
+/// Descriptor for `DeleteNotificationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteNotificationRequestDescriptor = $convert.base64Decode(
+    'ChlEZWxldGVOb3RpZmljYXRpb25SZXF1ZXN0EicKD25vdGlmaWNhdGlvbl9pZBgBIAEoCVIObm'
+    '90aWZpY2F0aW9uSWQSIQoMYWNjZXNzX3Rva2VuGAIgASgJUgthY2Nlc3NUb2tlbg==');
+
+@$core.Deprecated('Use deleteNotificationResponseDescriptor instead')
+const DeleteNotificationResponse$json = {
+  '1': 'DeleteNotificationResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `DeleteNotificationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteNotificationResponseDescriptor = $convert.base64Decode(
+    'ChpEZWxldGVOb3RpZmljYXRpb25SZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEh'
+    'gKB21lc3NhZ2UYAiABKAlSB21lc3NhZ2U=');
+

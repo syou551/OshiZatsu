@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/theme_service.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -40,7 +40,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: const Color(0xFFDC3545), // エラー色は固定
           ),
         );
       }
@@ -57,15 +57,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = ref.watch(themeServiceProvider);
+    
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppTheme.primaryColor,
-              AppTheme.primaryLightColor,
+              themeState.selectedColor.primaryColor,
+              themeState.selectedColor.primaryLightColor,
             ],
           ),
         ),
@@ -88,18 +90,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                AppTheme.primaryColor,
-                                AppTheme.primaryLightColor,
+                                themeState.selectedColor.primaryColor,
+                                themeState.selectedColor.primaryLightColor,
                               ],
                             ),
                             borderRadius: BorderRadius.circular(25),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.primaryColor.withOpacity(0.3),
+                                color: themeState.selectedColor.primaryColor.withOpacity(0.3),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
@@ -117,7 +119,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Text(
                           '推し雑',
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: AppTheme.primaryColor,
+                            color: themeState.selectedColor.primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -125,7 +127,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Text(
                           '推しの雑談配信通知アプリ',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textSecondaryColor,
+                            color: themeState.isDarkMode ? Colors.grey : const Color(0xFF6C757D),
                           ),
                         ),
                         const SizedBox(height: 32),
@@ -142,7 +144,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              side: BorderSide(color: AppTheme.primaryColor),
+                              side: BorderSide(color: themeState.selectedColor.primaryColor),
                             ),
                           ),
                         ),

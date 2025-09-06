@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/backend_client.dart';
+import '../../../../core/services/theme_service.dart';
 import '../../../../generated/oshizatsu.pb.dart' as pb;
-import 'package:grpc/grpc.dart' as grpc;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ChannelsPage extends ConsumerStatefulWidget {
@@ -42,17 +41,18 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
   void _showSnackBar(String message, {bool isError = false, bool isInfo = false}) {
     if (!mounted) return;
     
+    final themeState = ref.read(themeServiceProvider);
     Color backgroundColor;
     IconData icon;
     
     if (isError) {
-      backgroundColor = AppTheme.errorColor;
+      backgroundColor = const Color(0xFFDC3545); // エラー色は固定
       icon = Icons.error;
     } else if (isInfo) {
-      backgroundColor = AppTheme.secondaryColor;
+      backgroundColor = const Color(0xFF6B9DFF); // セカンダリ色は固定
       icon = Icons.info;
     } else {
-      backgroundColor = AppTheme.primaryColor;
+      backgroundColor = themeState.selectedColor.primaryColor;
       icon = Icons.check_circle;
     }
 
@@ -256,6 +256,8 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
   }
 
   void _showAddChannelDialog() {
+    final themeState = ref.read(themeServiceProvider);
+    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -269,12 +271,12 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.1),
+                color: themeState.selectedColor.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.add,
-                color: AppTheme.primaryColor,
+                color: themeState.selectedColor.primaryColor,
                 size: 20,
               ),
             ),
@@ -309,7 +311,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                     ScaffoldMessenger.of(dialogContext).showSnackBar(
                       const SnackBar(
                         content: Text('このチャンネルは既に登録されています'),
-                        backgroundColor: AppTheme.secondaryColor,
+                        backgroundColor: Color(0xFF6B9DFF), // セカンダリ色は固定
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -375,6 +377,8 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = ref.watch(themeServiceProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('チャンネル'),
@@ -402,20 +406,20 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          color: themeState.selectedColor.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(60),
                         ),
                         child: Icon(
                           Icons.subscriptions_outlined,
                           size: 60,
-                          color: AppTheme.primaryColor,
+                          color: themeState.selectedColor.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 24),
                       Text(
                         '登録されたチャンネルがありません',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: AppTheme.textSecondaryColor,
+                          color: themeState.isDarkMode ? Colors.grey : const Color(0xFF6C757D),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -423,7 +427,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                         '推しのYouTubeチャンネルを追加して\nライブ配信通知を受け取りましょう',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.textSecondaryColor,
+                          color: themeState.isDarkMode ? Colors.grey : const Color(0xFF6C757D),
                         ),
                       ),
                       const SizedBox(height: 32),
@@ -475,8 +479,8 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                   height: 60,
                                   decoration: BoxDecoration(
                                     color: isLive
-                                        ? AppTheme.errorColor
-                                        : AppTheme.primaryColor,
+                                        ? const Color(0xFFDC3545) // エラー色は固定
+                                        : themeState.selectedColor.primaryColor,
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Icon(
@@ -502,7 +506,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                       Text(
                                         'ID: ${channel.channelId}',
                                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: AppTheme.textSecondaryColor,
+                                          color: themeState.isDarkMode ? Colors.grey : const Color(0xFF6C757D),
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -510,7 +514,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: AppTheme.errorColor.withOpacity(0.1),
+                                            color: const Color(0xFFDC3545).withOpacity(0.1), // エラー色は固定
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: Row(
@@ -520,7 +524,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                                 width: 8,
                                                 height: 8,
                                                 decoration: const BoxDecoration(
-                                                  color: AppTheme.errorColor,
+                                                  color: Color(0xFFDC3545), // エラー色は固定
                                                   shape: BoxShape.circle,
                                                 ),
                                               ),
@@ -528,7 +532,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                               Text(
                                                 'ライブ配信中',
                                                 style: TextStyle(
-                                                  color: AppTheme.errorColor,
+                                                  color: const Color(0xFFDC3545), // エラー色は固定
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12,
                                                 ),
@@ -540,7 +544,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: AppTheme.secondaryColor.withOpacity(0.1),
+                                            color: const Color(0xFF6B9DFF).withOpacity(0.1), // セカンダリ色は固定
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: Row(
@@ -549,13 +553,13 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                               Icon(
                                                 Icons.schedule,
                                                 size: 12,
-                                                color: AppTheme.secondaryColor,
+                                                color: const Color(0xFF6B9DFF), // セカンダリ色は固定
                                               ),
                                               const SizedBox(width: 4),
                                               Text(
                                                 '次回配信: ${_formatDateTime(lastLiveScheduled)}',
                                                 style: TextStyle(
-                                                  color: AppTheme.secondaryColor,
+                                                  color: const Color(0xFF6B9DFF), // セカンダリ色は固定
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 12,
                                                 ),
@@ -587,7 +591,7 @@ class _ChannelsPageState extends ConsumerState<ChannelsPage> {
                                           value: 'remove',
                                           child: Row(
                                             children: [
-                                              Icon(Icons.delete, color: AppTheme.errorColor),
+                                              Icon(Icons.delete, color: const Color(0xFFDC3545)), // エラー色は固定
                                               SizedBox(width: 8),
                                               Text('削除'),
                                             ],

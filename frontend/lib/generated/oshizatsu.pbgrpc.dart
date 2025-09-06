@@ -87,6 +87,13 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetUserInfoRequest.fromBuffer(value),
         ($0.GetUserInfoResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateUserInfoRequest, $0.UpdateUserInfoResponse>(
+        'UpdateUserInfo',
+        updateUserInfo_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.UpdateUserInfoRequest.fromBuffer(value),
+        ($0.UpdateUserInfoResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall call, $async.Future<$0.LoginRequest> request) async {
@@ -101,9 +108,14 @@ abstract class AuthServiceBase extends $grpc.Service {
     return getUserInfo(call, await request);
   }
 
+  $async.Future<$0.UpdateUserInfoResponse> updateUserInfo_Pre($grpc.ServiceCall call, $async.Future<$0.UpdateUserInfoRequest> request) async {
+    return updateUserInfo(call, await request);
+  }
+
   $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
   $async.Future<$0.LogoutResponse> logout($grpc.ServiceCall call, $0.LogoutRequest request);
   $async.Future<$0.GetUserInfoResponse> getUserInfo($grpc.ServiceCall call, $0.GetUserInfoRequest request);
+  $async.Future<$0.UpdateUserInfoResponse> updateUserInfo($grpc.ServiceCall call, $0.UpdateUserInfoRequest request);
 }
 @$pb.GrpcServiceName('oshizatsu.ChannelService')
 class ChannelServiceClient extends $grpc.Client {
@@ -197,6 +209,14 @@ class NotificationServiceClient extends $grpc.Client {
       '/oshizatsu.NotificationService/GetNotifications',
       ($0.GetNotificationsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetNotificationsResponse.fromBuffer(value));
+  static final _$markNotificationAsRead = $grpc.ClientMethod<$0.MarkNotificationAsReadRequest, $0.MarkNotificationAsReadResponse>(
+      '/oshizatsu.NotificationService/MarkNotificationAsRead',
+      ($0.MarkNotificationAsReadRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.MarkNotificationAsReadResponse.fromBuffer(value));
+  static final _$deleteNotification = $grpc.ClientMethod<$0.DeleteNotificationRequest, $0.DeleteNotificationResponse>(
+      '/oshizatsu.NotificationService/DeleteNotification',
+      ($0.DeleteNotificationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.DeleteNotificationResponse.fromBuffer(value));
 
   NotificationServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -214,6 +234,14 @@ class NotificationServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetNotificationsResponse> getNotifications($0.GetNotificationsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getNotifications, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.MarkNotificationAsReadResponse> markNotificationAsRead($0.MarkNotificationAsReadRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$markNotificationAsRead, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.DeleteNotificationResponse> deleteNotification($0.DeleteNotificationRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$deleteNotification, request, options: options);
   }
 }
 
@@ -243,6 +271,20 @@ abstract class NotificationServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetNotificationsRequest.fromBuffer(value),
         ($0.GetNotificationsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.MarkNotificationAsReadRequest, $0.MarkNotificationAsReadResponse>(
+        'MarkNotificationAsRead',
+        markNotificationAsRead_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.MarkNotificationAsReadRequest.fromBuffer(value),
+        ($0.MarkNotificationAsReadResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteNotificationRequest, $0.DeleteNotificationResponse>(
+        'DeleteNotification',
+        deleteNotification_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.DeleteNotificationRequest.fromBuffer(value),
+        ($0.DeleteNotificationResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.RegisterFCMTokenResponse> registerFCMToken_Pre($grpc.ServiceCall call, $async.Future<$0.RegisterFCMTokenRequest> request) async {
@@ -257,7 +299,17 @@ abstract class NotificationServiceBase extends $grpc.Service {
     return getNotifications(call, await request);
   }
 
+  $async.Future<$0.MarkNotificationAsReadResponse> markNotificationAsRead_Pre($grpc.ServiceCall call, $async.Future<$0.MarkNotificationAsReadRequest> request) async {
+    return markNotificationAsRead(call, await request);
+  }
+
+  $async.Future<$0.DeleteNotificationResponse> deleteNotification_Pre($grpc.ServiceCall call, $async.Future<$0.DeleteNotificationRequest> request) async {
+    return deleteNotification(call, await request);
+  }
+
   $async.Future<$0.RegisterFCMTokenResponse> registerFCMToken($grpc.ServiceCall call, $0.RegisterFCMTokenRequest request);
   $async.Future<$0.UnregisterFCMTokenResponse> unregisterFCMToken($grpc.ServiceCall call, $0.UnregisterFCMTokenRequest request);
   $async.Future<$0.GetNotificationsResponse> getNotifications($grpc.ServiceCall call, $0.GetNotificationsRequest request);
+  $async.Future<$0.MarkNotificationAsReadResponse> markNotificationAsRead($grpc.ServiceCall call, $0.MarkNotificationAsReadRequest request);
+  $async.Future<$0.DeleteNotificationResponse> deleteNotification($grpc.ServiceCall call, $0.DeleteNotificationRequest request);
 }

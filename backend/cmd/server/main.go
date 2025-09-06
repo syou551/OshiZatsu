@@ -338,6 +338,42 @@ func (s *Server) GetNotifications(ctx context.Context, req *proto.GetNotificatio
 	}, nil
 }
 
+// MarkNotificationAsRead 通知を既読にする
+func (s *Server) MarkNotificationAsRead(ctx context.Context, req *proto.MarkNotificationAsReadRequest) (*proto.MarkNotificationAsReadResponse, error) {
+	user, err := s.authService.ValidateToken(ctx, req.AccessToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+	}
+
+	err = s.markNotificationAsRead(req.NotificationId, user.ID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to mark notification as read: %v", err)
+	}
+
+	return &proto.MarkNotificationAsReadResponse{
+		Success: true,
+		Message: "Notification marked as read",
+	}, nil
+}
+
+// DeleteNotification 通知を削除
+func (s *Server) DeleteNotification(ctx context.Context, req *proto.DeleteNotificationRequest) (*proto.DeleteNotificationResponse, error) {
+	user, err := s.authService.ValidateToken(ctx, req.AccessToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+	}
+
+	err = s.deleteNotification(req.NotificationId, user.ID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to delete notification: %v", err)
+	}
+
+	return &proto.DeleteNotificationResponse{
+		Success: true,
+		Message: "Notification deleted",
+	}, nil
+}
+
 // データベース操作のヘルパーメソッド
 func (s *Server) createChannel(channel *models.Channel) error {
 	query := `INSERT INTO channels (id, channel_id, name, last_video_id, last_live_scheduled_time, is_live, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (channel_id) DO NOTHING`
@@ -437,6 +473,46 @@ func (s *Server) getUserNotifications(userID string, limit, offset int32) ([]*mo
 	}
 
 	return notifications, nil
+}
+
+func (s *Server) markNotificationAsRead(notificationID, userID string) error {
+	query := `UPDATE notifications SET is_read = true WHERE id = $1 AND user_id = $2`
+
+	result, err := s.db.Exec(query, notificationID, userID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("notification not found or not owned by user")
+	}
+
+	return nil
+}
+
+func (s *Server) deleteNotification(notificationID, userID string) error {
+	query := `DELETE FROM notifications WHERE id = $1 AND user_id = $2`
+
+	result, err := s.db.Exec(query, notificationID, userID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("notification not found or not owned by user")
+	}
+
+	return nil
 }
 
 func main() {
